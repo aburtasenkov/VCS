@@ -7,8 +7,8 @@
 const std::string CURRENT_FILENAME = "main.cpp";
 
 const std::filesystem::path CURRENT_PATH{"/home/aburtasenkov/Pet-Projects/git"};
-const std::filesystem::path GIT_PATH{"VCS"}; 
-const std::filesystem::path GITIGNORE_PATH{GIT_PATH/"ignore"};
+const std::filesystem::path VCS_PATH{"VCS"}; 
+const std::filesystem::path VCS_IGNORE_PATH{VCS_PATH/"ignore"};
 
 const std::string INIT = "init";
 
@@ -29,7 +29,7 @@ void output_to_directory(std::ostream& os, std::filesystem::path directory, std:
 
 void initialize(std::string repository_name)
 {
-    std::ofstream ofs {GITIGNORE_PATH};
+    std::ofstream ofs {VCS_IGNORE_PATH};
     
     output_to_directory(ofs, CURRENT_PATH);
 }
