@@ -1,4 +1,6 @@
 #include <list>
+#include <filesystem>
+#include <fstream>
 #include "Line.hpp"
 
 namespace DocumentClass
@@ -8,6 +10,7 @@ namespace DocumentClass
         // User - Interface
         Document();
         Document(std::istream& is);
+        Document(const std::filesystem::path& path_to_input_file);
 
         Document& operator=(Document&& other);
 
@@ -17,6 +20,5 @@ namespace DocumentClass
         }
     private: 
         std::list<LineClass::Line> lines;
-
     };
 }
