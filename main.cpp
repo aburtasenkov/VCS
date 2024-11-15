@@ -6,10 +6,11 @@
 
 const std::string CURRENT_FILENAME = "main.cpp";
 
-const std::filesystem::path CURRENT_PATH{"./"};
+const std::filesystem::path CURRENT_PATH{std::filesystem::current_path()};
 const std::filesystem::path VCS_PATH{"VCS/"}; 
-const std::filesystem::path VCS_IGNORE{VCS_PATH/"ignore"};
-const std::filesystem::path VCS_FILE_COPY_PATH{VCS_PATH/"files/"};
+
+const std::filesystem::path VCS_IGNORE{"ignore"};
+const std::filesystem::path VCS_FILE_COPY_PATH{"files/"};
 
 const std::string INIT = "init";
 
@@ -19,6 +20,7 @@ const int MIN_INPUT_ARGUMENTS = 2;
 void output_directory_files(std::ostream& os, std::filesystem::path directory, std::string exception = ".git", std::string tabulation = "")
 // Output all files
 // If dir is directory call output_directory on it with extra "    " tabulation for visibility
+// Pre-Condition: 
 {
     for (const auto& path : std::filesystem::directory_iterator{directory})
     {
@@ -54,9 +56,14 @@ void copy_files_to_directory(std::filesystem::path source_directory, std::filesy
 
 void initialize(std::string repository_name)
 {
-    std::ofstream ofs {VCS_IGNORE};
-    
+    // Create VCS directories
+    std::filesystem::create_directory(CURRENT_PATH/VCS_PATH);
+    std::filesystem::create_directory(CURRENT_PATH/VCS_PATH/VCS_FILE_COPY_PATH);
+
+    std::ofstream ofs {CURRENT_PATH/VCS_PATH/VCS_IGNORE};
     output_directory_files(ofs, CURRENT_PATH);
+
+    copy_files_to_directory(CURRENT_PATH, CURRENT_PATH/VCS_PATH/VCS_FILE_COPY_PATH);
 }
 
 int main(int argc, char** argv)
@@ -70,8 +77,6 @@ try
 
     if (INPUT_CURRENT_COMMAND == INIT)
         initialize(argv[INPUT_COMMAND_INDEX + 1]);
-
-    copy_files_to_directory(CURRENT_PATH, VCS_PATH);
 
     return 0;
 }
