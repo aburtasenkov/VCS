@@ -6,7 +6,7 @@
 
 const std::string CURRENT_FILENAME = "main.cpp";
 
-const std::filesystem::path CURRENT_PATH{"/home/aburtasenkov/Pet-Projects/git"};
+const std::filesystem::path CURRENT_PATH{"/home/aburtasenkov/Pet-Projects/VCS"};
 const std::filesystem::path VCS_PATH{"VCS"}; 
 const std::filesystem::path VCS_IGNORE_PATH{VCS_PATH/"ignore"};
 
