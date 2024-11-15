@@ -14,14 +14,14 @@ const std::string INIT = "init";
 
 const int COMMAND_INDEX = 1;
 
-void output_to_directory(std::ostream& os, std::filesystem::path directory, std::string tabulation = "")
+void directory_files_output(std::ostream& os, std::filesystem::path directory, std::string tabulation = "")
 // Output all files
 // If dir is directory call output_directory on it with extra "    " tabulation for visibility
 {
     for (const auto& dir : std::filesystem::directory_iterator{directory})
     {
         if (dir.is_directory())
-            output_to_directory(os, dir, tabulation + "    ");
+            directory_files_output(os, dir, tabulation + "    ");
         else
             os << tabulation << dir << std::endl;
     }
@@ -31,7 +31,7 @@ void initialize(std::string repository_name)
 {
     std::ofstream ofs {VCS_IGNORE_PATH};
     
-    output_to_directory(ofs, CURRENT_PATH);
+    directory_files_output(ofs, CURRENT_PATH);
 }
 
 int main(int argc, char** argv)
