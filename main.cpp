@@ -42,7 +42,7 @@ try
     if (argc < MIN_INPUT_ARGUMENTS)
         throw Exception{"Syntax-Error: Bad Command Line Input", {CURRENT_FILENAME, 15}};
 
-    std::string CURRENT_COMMAND = argv[COMMAND_INDEX];
+    std::string INPUT_CURRENT_COMMAND = argv[COMMAND_INDEX];
 
     if (INPUT_CURRENT_COMMAND == INIT)
         initialize(argv[COMMAND_INDEX + 1]);
