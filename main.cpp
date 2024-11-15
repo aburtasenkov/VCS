@@ -60,6 +60,7 @@ void initialize(std::string repository_name)
     std::filesystem::create_directory(CURRENT_PATH/VCS_PATH);
     std::filesystem::create_directory(CURRENT_PATH/VCS_PATH/VCS_FILE_COPY_PATH);
 
+    // Create VCS ignore file
     std::ofstream ofs {CURRENT_PATH/VCS_PATH/VCS_IGNORE};
     output_directory_files(ofs, CURRENT_PATH);
 
