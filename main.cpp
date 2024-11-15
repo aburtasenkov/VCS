@@ -12,7 +12,8 @@ const std::filesystem::path VCS_IGNORE_PATH{VCS_PATH/"ignore"};
 
 const std::string INIT = "init";
 
-const int COMMAND_INDEX = 1;
+const int INPUT_COMMAND_INDEX = 1;
+const int MIN_INPUT_ARGUMENTS = 2;
 
 void directory_files_output(std::ostream& os, std::filesystem::path directory, std::string tabulation = "")
 // Output all files
@@ -38,12 +39,12 @@ int main(int argc, char** argv)
 try
 {    
     // argv should at least contain a string after executable name
-    if (argc < 2)
+    if (argc < MIN_INPUT_ARGUMENTS)
         throw Exception{"Syntax-Error: Bad Command Line Input", {CURRENT_FILENAME, 15}};
 
     std::string CURRENT_COMMAND = argv[COMMAND_INDEX];
 
-    if (CURRENT_COMMAND == INIT)
+    if (INPUT_CURRENT_COMMAND == INIT)
         initialize(argv[COMMAND_INDEX + 1]);
 
     return 0;
