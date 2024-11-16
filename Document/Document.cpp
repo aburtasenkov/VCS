@@ -25,3 +25,19 @@ DocumentClass::Document& DocumentClass::Document::operator=(DocumentClass::Docum
     lines = std::move(other.lines);
     return *this;
 }
+
+LineClass::Line& DocumentClass::Document::operator[](int index)
+{
+    if (index < 0) throw std::runtime_error("LineClass::line::operator[index]: index < 0.");
+
+    if (!index < size())
+        return *(new LineClass::Line{});    // LEAKING MEMORY
+    
+    auto object_iterator = lines.begin();
+    while(index > 0)
+    {
+        ++object_iterator;
+        --index; 
+    }
+    return *object_iterator;
+}
