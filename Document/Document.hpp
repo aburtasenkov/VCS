@@ -14,6 +14,13 @@ namespace DocumentClass
 
         Document& operator=(Document&& other);
 
+        LineClass::Line& operator[](int index);
+
+        int size() const
+        {
+            return lines.size();
+        }
+
         // Developer - Interface
         std::list<LineClass::Line>& get_container() {
             return lines;
