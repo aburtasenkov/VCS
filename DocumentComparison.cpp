@@ -6,31 +6,16 @@ DocumentComparisonClass::DocumentComparison::DocumentComparison(DocumentClass::D
     // iterate through each line
     for (int index_line = 0; index_line < original_state.size(); ++index_line)
     {
-        int original_state_line_words_count = original_state[index_line].get_container().size();
-        int changed_state_line_words_count = changed_state[index_line].get_container().size();
-
-        // Not same amount of words
-        if (original_state_line_words_count != changed_state_line_words_count)
+        if (!(original_state[index_line] == changed_state[index_line]))
         {
             added_lines.push_back({changed_state[index_line], index_line});
             removed_lines.push_back(index_line);
-            continue;
-        }
-
-        //  iterate and compare each word together
-        for (int index_word = 0; index_word < original_state_line_words_count; ++index_word)
-        {
-            if (original_state[index_line][index_word] != changed_state[index_line][index_word])
-            {
-                added_lines.push_back({changed_state[index_line], index_line});
-                removed_lines.push_back(index_line);
-                break;  // Go to next line
-            }
         }
     }
 }
 
-bool DocumentComparisonClass::DocumentComparison::is_inserted(DocumentClass::Document& doc, LineClass::Line& line, int index)
+bool DocumentComparisonClass::is_inserted(DocumentClass::Document& doc, LineClass::Line& line, int index)
+// Possibly wrong code idk didnt check
 {
     for (;index < doc.size(); ++index)
     {
