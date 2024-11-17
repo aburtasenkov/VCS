@@ -23,7 +23,7 @@ DocumentClass::Document::Document(const std::filesystem::path& path_to_input_fil
 LineClass::Line& DocumentClass::Document::operator[](int index)
 {
     if (index < 0) throw std::runtime_error("DocumentClass::Document::operator[](int index): index smaller than 0");
-    if (index = 0)
+    if (index == 0)
         return lines.front();
     return this->operator[](index - 1);
 }
