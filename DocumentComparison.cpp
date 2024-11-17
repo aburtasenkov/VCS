@@ -15,7 +15,6 @@ DocumentComparisonClass::DocumentComparison::DocumentComparison(DocumentClass::D
         // Not same amount of words
         if (original_state_line_words_count != changed_state_line_words_count)
         {
-            std::cout << "NOT SAME AMOUNT OF WORDS\n";
             temp_added.push_back({changed_state[index_line], index_line});
             temp_removed.push_back(index_line);
             continue;
@@ -25,10 +24,8 @@ DocumentComparisonClass::DocumentComparison::DocumentComparison(DocumentClass::D
         //  iterate and compare each word together
         for (int index_word = 0; index_word < original_state_line_words_count; ++index_word)
         {
-            std::cout << "NEW_WORD\n";
             if (original_state[index_line][index_word] != changed_state[index_line][index_word])
             {
-                std::cout << "NOT SAME WORD\n";
                 temp_added.push_back({changed_state[index_line], index_line});
                 temp_removed.push_back(index_line);
                 break;  // Go to next line
