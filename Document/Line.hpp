@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 namespace LineClass{
     class Line{
@@ -14,6 +15,11 @@ namespace LineClass{
             Line(const std::string& line);
 
             Line(const std::vector<std::string>& const_ref);
+
+            bool operator==(Line& other)
+            {
+                return std::equal(words.begin(), words.end(), other.get_container().begin());
+            }
 
             std::string& operator[](int i);
             const std::string& operator[](int i) const;

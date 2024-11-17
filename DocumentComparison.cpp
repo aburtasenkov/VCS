@@ -29,3 +29,15 @@ DocumentComparisonClass::DocumentComparison::DocumentComparison(DocumentClass::D
         }
     }
 }
+
+bool DocumentComparisonClass::DocumentComparison::is_inserted(DocumentClass::Document& doc, LineClass::Line& line, int index)
+{
+    for (;index < doc.size(); ++index)
+    {
+        if (doc[index] == line)
+        {
+            return true;
+        }
+    }
+    return false;
+}
