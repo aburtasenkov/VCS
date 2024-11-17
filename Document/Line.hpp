@@ -15,8 +15,6 @@ namespace LineClass{
 
             Line(const std::vector<std::string>& const_ref);
 
-            Line(std::istream& is);
-
             std::string& operator[](int i);
             const std::string& operator[](int i) const;
 

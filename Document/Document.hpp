@@ -11,9 +11,7 @@ namespace DocumentClass
         Document();
         Document(std::istream& is);
         Document(const std::filesystem::path& path_to_input_file);
-
-        Document& operator=(Document&& other);
-
+        
         LineClass::Line& operator[](int index);
 
         int size() const

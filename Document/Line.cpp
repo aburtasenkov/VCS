@@ -10,8 +10,8 @@ LineClass::Line::Line(const std::string& line)
     std::istringstream iss{line};
     std::string word;
 
-    for (std::string word; iss.good();words.push_back(word)) 
-        iss >> word;
+    while (iss >> word)
+        words.push_back(word);
 }
 
 LineClass::Line::Line(const std::vector<std::string>& const_ref)
