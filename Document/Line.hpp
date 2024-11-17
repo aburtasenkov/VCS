@@ -21,6 +21,11 @@ namespace LineClass{
                 return std::equal(words.begin(), words.end(), other.get_container().begin());
             }
 
+            bool operator!=(Line& other)
+            {
+                return !(*this == other);
+            }
+
             std::string& operator[](int i);
             const std::string& operator[](int i) const;
 
