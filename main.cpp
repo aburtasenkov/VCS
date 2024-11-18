@@ -2,7 +2,7 @@
 #include <fstream>
 #include <filesystem>
 #include "Exception.hpp"
-#include "DocumentComparison.hpp"
+#include "./Document/Document.hpp"
 
 // absolute filepath
 const std::filesystem::path CURRENT_PATH{std::filesystem::current_path()};
@@ -52,7 +52,7 @@ void copy_files_to_directory(std::filesystem::path source_directory, std::filesy
         }
         else
         {
-            DocumentClass::Document file{path.path()};  // path.path() returns std::filesystem::path
+            Document_Namespace::Document file{path.path()};  // path.path() returns std::filesystem::path
         }
     }
 }
