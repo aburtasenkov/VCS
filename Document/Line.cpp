@@ -44,20 +44,20 @@ bool Line_Namespace::Line::operator!=(Line& other)
 }
 
 
-std::string& Line_Namespace::Line::operator[](int i)
+std::string& Line_Namespace::Line::operator[](int index)
 // Range-checked operation
 // Returns non-const value
 {
-    if (0 < i || i >= words.size()) throw std::runtime_error{"Line::operator[](int index) - index out of range"};
-    return words[i];
+    if (0 < index || index >= words.size()) throw std::runtime_error{"Line::operator[](int index) - index out of range"};
+    return words[index];
 }
 
-const std::string& Line_Namespace::Line::operator[](int i) const
+const std::string& Line_Namespace::Line::operator[](int index) const
 // Range-checked operation
 // Returns const value
 {
-    if (0 < i || i >= words.size()) throw std::runtime_error{"Line::operator[](int index) - index out of range"};
-    return words[i];
+    if (0 < index || index >= words.size()) throw std::runtime_error{"Line::operator[](int index) - index out of range"};
+    return words[index];
 }
 
 int Line_Namespace::Line::size()
@@ -65,16 +65,20 @@ int Line_Namespace::Line::size()
     return words.size();
 }
 
-std::ostream& Line_Namespace::operator<<(std::ostream& os, Line ll)
+std::ostream& Line_Namespace::operator<<(std::ostream& os, Line& line)
 {
     os << '"';
-    auto b = ll.begin();
-    auto e = ll.end();
+    auto begin = line.begin();
 
-    while (b != e) 
+    while (begin != line.end()) 
     {
-        os << *b << ' ';
-        ++b;
+        // if there are more than 1 word left in line
+        // otherwise - extra whitespace at the end of the line
+        if (line.end() - begin != 1)
+            os << *begin << ' ';
+        else
+            os << *begin;
+        ++begin;
     }
     return os << '"';
 }

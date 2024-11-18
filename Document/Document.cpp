@@ -27,19 +27,14 @@ Document_Namespace::Document::Document(const std::filesystem::path& path_to_inpu
 {
     std::string input = static_cast<std::string>(path_to_input_file);
     std::ifstream ifs{input};
-    *this = Document_Namespace::Document(ifs);
+    *this = Document_Namespace::Document(ifs);  // move operator, so basically no resources wasted
 }
 
 Line_Namespace::Line& Document_Namespace::Document::operator[](int index)
+// range checked indexing
 {
-    if (index < 0) throw std::runtime_error("Document_Namespace::Document::operator[](int index): index smaller than 0");
-    auto p = lines.begin();
-    while (index != 0)
-    {
-        ++p;
-        --index;
-    }
-    return *p;
+    if (0 < index || index >= lines.size()) throw std::runtime_error{"Document::operator[](int index) - index out of range"};
+    return lines[index];
 }
 
 int Document_Namespace::Document::size() const

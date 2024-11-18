@@ -25,7 +25,7 @@ namespace Document_Namespace
     };
 
     /*
-    Document is changed pattern:
+    Document changes pattern stored in .change files that are named by hash value of commit:
 
     { *PATH* { *REMOVED LINES* } { *ADDED LINES* } }
     */

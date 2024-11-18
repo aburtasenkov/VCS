@@ -22,12 +22,12 @@ namespace Line_Namespace{
             bool operator==(Line& other);
             bool operator!=(Line& other);
 
-            std::string& operator[](int i);
-            const std::string& operator[](int i) const;
+            std::string& operator[](int index);
+            const std::string& operator[](int index) const;
             int size();
         private:
             std::vector<std::string> words;
     };
 
-    std::ostream& operator<<(std::ostream& os, Line ll);
+    std::ostream& operator<<(std::ostream& os, Line& line);
 }
