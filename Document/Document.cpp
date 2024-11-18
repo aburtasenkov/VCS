@@ -82,3 +82,26 @@ bool Document_Namespace::contains(Document_Namespace::Document& doc, Line_Namesp
     }
     return false;
 }
+
+
+std::ostream& Document_Namespace::DocumentComparison::output_added_lines(std::ostream& os)
+{
+    os << "{ ";
+    for (auto& pair : added_lines)
+    {
+        os << "{ " << pair.first << " " << pair.second << " } ";
+    }
+    os << "}";
+    return os;
+}
+
+std::ostream& Document_Namespace::DocumentComparison::output_removed_lines(std::ostream& os)
+{
+    os << "{ ";
+    for (int index : removed_lines)
+    {
+        os << "{ " << index << " } ";
+    }
+    os << "}";
+    return os;
+}

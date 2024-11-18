@@ -67,7 +67,6 @@ int Line_Namespace::Line::size()
 
 std::ostream& Line_Namespace::operator<<(std::ostream& os, Line& line)
 {
-    os << '"';
     auto begin = line.begin();
 
     while (begin != line.end()) 
@@ -80,5 +79,5 @@ std::ostream& Line_Namespace::operator<<(std::ostream& os, Line& line)
             os << *begin;
         ++begin;
     }
-    return os << '"';
+    return os;
 }

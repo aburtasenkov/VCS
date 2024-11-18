@@ -27,7 +27,31 @@ namespace Document_Namespace
     /*
     Document changes pattern stored in .change files that are named by hash value of commit:
 
-    { *PATH* { *REMOVED LINES* } { *ADDED LINES* } }
+    A single Commit followed by another commit:
+    {
+        HASH { 
+            FILEPATH
+                { INDEX INDEX } 
+                { { ADDED_LINE INDEX } { ADDED_LINE INDEX } } 
+             }
+             {
+             FILEPATH
+                { INDEX INDEX } 
+                { { ADDED_LINE INDEX } { ADDED_LINE INDEX } } 
+             }
+    }
+    {
+        HASH { 
+            FILEPATH
+                { INDEX INDEX } 
+                { { ADDED_LINE INDEX } { ADDED_LINE INDEX } } 
+             }
+             {
+             FILEPATH
+                { INDEX INDEX } 
+                { { ADDED_LINE INDEX } { ADDED_LINE INDEX } } 
+             }
+    }
     */
 
     class DocumentComparison
@@ -42,6 +66,9 @@ namespace Document_Namespace
             { 
                 return ( ( added_lines.size() || removed_lines.size() ) ? true : false );
             }
+
+            std::ostream& output_added_lines(std::ostream& os);
+            std::ostream& output_removed_lines(std::ostream& os);
         private:
             void push_back_added_lines(Document_Namespace::Document& original_state, Document_Namespace::Document& changed_state);
             void push_back_removed_lines(Document_Namespace::Document& original_state, Document_Namespace::Document& changed_state);
