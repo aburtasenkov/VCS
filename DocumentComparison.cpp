@@ -12,8 +12,7 @@ DocumentComparisonClass::DocumentComparison::DocumentComparison(DocumentClass::D
     }
 }
 
-bool DocumentComparisonClass::is_inserted(DocumentClass::Document::iterator b, DocumentClass::Document::iterator e, LineClass::Line& line)
-// Possibly wrong code idk didnt check
+bool DocumentComparisonClass::contains(DocumentClass::Document::iterator b, DocumentClass::Document::iterator e, LineClass::Line& line)
 {
     while (b != e)
     {

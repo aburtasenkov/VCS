@@ -25,5 +25,5 @@ namespace DocumentComparisonClass
             std::vector<int> removed_lines; // stores indexes of lines that were removed
     };
 
-    bool is_inserted(DocumentClass::Document::iterator b, DocumentClass::Document::iterator e, LineClass::Line& line);
+    bool contains(DocumentClass::Document::iterator b, DocumentClass::Document::iterator e, LineClass::Line& line);
 };
