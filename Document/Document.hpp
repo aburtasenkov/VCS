@@ -73,6 +73,7 @@ namespace Document_Namespace
     class DocumentComparison
     {
         public:
+            DocumentComparison() {  }
             DocumentComparison(const Document_Namespace::Document& source, const Document_Namespace::Document& modified);
 
             std::ostream& output(std::ostream& os, const Linetype& type) const ;
