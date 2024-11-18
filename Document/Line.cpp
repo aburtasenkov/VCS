@@ -1,11 +1,21 @@
 #include "Line.hpp"
 
-LineClass::Line::Line()
+Line_Namespace::Line::iterator Line_Namespace::Line::begin()
+{
+    return words.begin();
+}
+
+Line_Namespace::Line::iterator Line_Namespace::Line::end()
+{
+    return words.end();
+}
+
+Line_Namespace::Line::Line()
     :words{}
 {
 }
 
-LineClass::Line::Line(const std::string& line)
+Line_Namespace::Line::Line(const std::string& line)
 {
     std::istringstream iss{line};
     std::string word;
@@ -14,13 +24,27 @@ LineClass::Line::Line(const std::string& line)
         words.push_back(word);
 }
 
-LineClass::Line::Line(const std::vector<std::string>& const_ref)
+Line_Namespace::Line::Line(const std::vector<std::string>& const_ref)
     :words{const_ref}
 {
 }
 
+bool Line_Namespace::Line::operator==(Line& other)
+{
+    // if size doesn't match
+    if (size() != other.size())
+        return false;
+    // Check each word
+    return std::equal(words.begin(), words.end(), other.begin());
+}
 
-std::string& LineClass::Line::operator[](int i)
+bool Line_Namespace::Line::operator!=(Line& other)
+{
+    return !(*this == other);
+}
+
+
+std::string& Line_Namespace::Line::operator[](int i)
 // Range-checked operation
 // Returns non-const value
 {
@@ -28,7 +52,7 @@ std::string& LineClass::Line::operator[](int i)
     return words[i];
 }
 
-const std::string& LineClass::Line::operator[](int i) const
+const std::string& Line_Namespace::Line::operator[](int i) const
 // Range-checked operation
 // Returns const value
 {
@@ -36,7 +60,12 @@ const std::string& LineClass::Line::operator[](int i) const
     return words[i];
 }
 
-std::ostream& LineClass::operator<<(std::ostream& os, Line ll)
+int Line_Namespace::Line::size()
+{
+    return words.size();
+}
+
+std::ostream& Line_Namespace::operator<<(std::ostream& os, Line ll)
 {
     os << '"';
     auto b = ll.begin();

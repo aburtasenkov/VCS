@@ -5,42 +5,26 @@
 #include <sstream>
 #include <algorithm>
 
-namespace LineClass{
+namespace Line_Namespace{
     class Line{
         public:
-            // STL Interface
+            // STL - Interface
             typedef std::vector<std::string>::iterator iterator;
 
-            iterator begin()
-            {
-                return words.begin();
-            }
-
-            iterator end()
-            {
-                return words.end();
-            }
-
+            iterator begin();
+            iterator end();
+            
             // User-Interface
-
             Line();
-
             Line(const std::string& line);
-
             Line(const std::vector<std::string>& const_ref);
 
-            bool operator==(Line& other)
-            {
-                return std::equal(words.begin(), words.end(), other.begin());
-            }
-
-            bool operator!=(Line& other)
-            {
-                return !(*this == other);
-            }
+            bool operator==(Line& other);
+            bool operator!=(Line& other);
 
             std::string& operator[](int i);
             const std::string& operator[](int i) const;
+            int size();
         private:
             std::vector<std::string> words;
     };
