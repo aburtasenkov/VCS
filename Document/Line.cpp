@@ -36,22 +36,16 @@ const std::string& LineClass::Line::operator[](int i) const
     return words[i];
 }
 
-void LineClass::Line::push_back(const std::string& string)
-{
-    words.push_back(string);
-}
-    
-std::vector<std::string>& LineClass::Line::get_container()
-{
-    return words;
-}
-
 std::ostream& LineClass::operator<<(std::ostream& os, Line ll)
 {
     os << '"';
-    for (auto string : ll.get_container()) 
+    auto b = ll.begin();
+    auto e = ll.end();
+
+    while (b != e) 
     {
-        os << string << ' ';
+        os << *b << ' ';
+        ++b;
     }
     return os << '"';
 }

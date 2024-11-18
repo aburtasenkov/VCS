@@ -14,15 +14,14 @@ DocumentComparisonClass::DocumentComparison::DocumentComparison(DocumentClass::D
     }
 }
 
-bool DocumentComparisonClass::is_inserted(DocumentClass::Document& doc, LineClass::Line& line, int index)
+bool DocumentComparisonClass::is_inserted(DocumentClass::Document::iterator b, DocumentClass::Document::iterator e, LineClass::Line& line, int index)
 // Possibly wrong code idk didnt check
 {
-    for (;index < doc.size(); ++index)
+    while (b != e)
     {
-        if (doc[index] == line)
-        {
+        if (*b == line)
             return true;
-        }
+        ++b;
     }
     return false;
 }

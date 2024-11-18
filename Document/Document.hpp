@@ -7,6 +7,19 @@ namespace DocumentClass
 {
     class Document{
     public:
+        // STL - Interface
+        typedef std::list<LineClass::Line>::iterator iterator;
+
+        iterator begin()
+        {
+            return lines.begin();
+        }
+
+        iterator end()
+        {
+            return lines.end();
+        }
+
         // User - Interface
         Document();
         Document(std::istream& is);
@@ -17,11 +30,6 @@ namespace DocumentClass
         int size() const
         {
             return lines.size();
-        }
-
-        // Developer - Interface
-        std::list<LineClass::Line>& get_container() {
-            return lines;
         }
     private: 
         std::list<LineClass::Line> lines;

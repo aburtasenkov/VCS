@@ -8,6 +8,19 @@
 namespace LineClass{
     class Line{
         public:
+            // STL Interface
+            typedef std::vector<std::string>::iterator iterator;
+
+            iterator begin()
+            {
+                return words.begin();
+            }
+
+            iterator end()
+            {
+                return words.end();
+            }
+
             // User-Interface
 
             Line();
@@ -18,7 +31,7 @@ namespace LineClass{
 
             bool operator==(Line& other)
             {
-                return std::equal(words.begin(), words.end(), other.get_container().begin());
+                return std::equal(words.begin(), words.end(), other.begin());
             }
 
             bool operator!=(Line& other)
@@ -28,12 +41,6 @@ namespace LineClass{
 
             std::string& operator[](int i);
             const std::string& operator[](int i) const;
-
-            void push_back(const std::string& string);
-            
-            // Developer-Interface
-
-            std::vector<std::string>& get_container(); 
         private:
             std::vector<std::string> words;
     };
