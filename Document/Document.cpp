@@ -39,33 +39,39 @@ int Document_Namespace::Document::size() const
     return lines.size();
 }
 
-Document_Namespace::DocumentComparison::DocumentComparison(Document_Namespace::Document& original_state, Document_Namespace::Document& changed_state)
-// Compares 2 documents for changes on initialization
+std::filesystem::path Document_Namespace::Document::get_path()
 {
-    push_back_added_lines(original_state, changed_state);
-    push_back_removed_lines(original_state, changed_state);
+    return filepath;
 }
 
-void Document_Namespace::DocumentComparison::push_back_added_lines(Document_Namespace::Document& original_state, Document_Namespace::Document& changed_state)
+Document_Namespace::DocumentComparison::DocumentComparison(Document_Namespace::Document& source, Document_Namespace::Document& modified)
+    :source_filepath(source.get_path()), modified_filepath(modified.get_path())
+// Compares 2 documents for changes on initialization
+{
+    push_back_inserted(source, modified);
+    push_back_removed(source, modified);
+}
+
+void Document_Namespace::DocumentComparison::push_back_inserted(Document_Namespace::Document& source, Document_Namespace::Document& modified)
 {
     int index = 0;
-    // if original_state doesn't contain any line of changed_state -> new line was added to changed_state
-    for (auto& line : changed_state)
+    // if source doesn't contain any line of modified -> new line was added to modified
+    for (auto& line : modified)
     {
-        if (!contains(original_state, line))
-            added_lines.push_back({line, index});
+        if (!contains(source, line))
+            inserted.push_back({line, index});
         ++index;
     }
 }
 
-void Document_Namespace::DocumentComparison::push_back_removed_lines(Document_Namespace::Document& original_state, Document_Namespace::Document& changed_state)
+void Document_Namespace::DocumentComparison::push_back_removed(Document_Namespace::Document& source, Document_Namespace::Document& modified)
 {
     int index = 0;
-    // if changed_state doesn't contain any line of original_state -> a line was removed from original_state
-    for (auto& line : original_state)
+    // if modified doesn't contain any line of source -> a line was removed from source
+    for (auto& line : source)
     {
-        if (!contains(changed_state, line))
-            removed_lines.push_back(index);
+        if (!contains(modified, line))
+            removed.push_back(index);
         ++index;
     }
 }
@@ -81,10 +87,10 @@ bool Document_Namespace::contains(Document_Namespace::Document& doc, Line_Namesp
 }
 
 
-std::ostream& Document_Namespace::DocumentComparison::output_added_lines(std::ostream& os)
+std::ostream& Document_Namespace::DocumentComparison::output_inserted(std::ostream& os)
 {
     os << "{ ";
-    for (auto& pair : added_lines)
+    for (auto& pair : inserted)
     {
         os << "{ " << pair.first << " " << pair.second << " } ";
     }
@@ -92,13 +98,40 @@ std::ostream& Document_Namespace::DocumentComparison::output_added_lines(std::os
     return os;
 }
 
-std::ostream& Document_Namespace::DocumentComparison::output_removed_lines(std::ostream& os)
+std::ostream& Document_Namespace::DocumentComparison::output_removed(std::ostream& os)
 {
     os << "{ ";
-    for (int index : removed_lines)
+    for (int index : removed)
     {
         os << "{ " << index << " } ";
     }
     os << "}";
     return os;
+}
+
+std::ostream& Document_Namespace::DocumentComparison::output(std::ostream& os, Document_Namespace::Linetype type)
+{
+    if (type == Document_Namespace::Linetype::inserted)
+    {
+        return output_inserted(os);
+    }
+    else if (type == Document_Namespace::Linetype::removed)
+    {
+        return output_removed(os);
+    }
+    else throw std::runtime_error("std::ostream& Document_Namespace::DocumentComparison::output(std::ostream& os, Document_Namespace::Linetype type): bad type parameter");
+}
+
+std::filesystem::path Document_Namespace::DocumentComparison::get_path(Document_Namespace::Filetype type)
+{
+    if (type == Document_Namespace::Filetype::source)
+        return source_filepath;
+    else if (type == Document_Namespace::Filetype::modified)
+        return modified_filepath;
+    else throw std::runtime_error("std::filesystem::path Document_Namespace::DocumentComparison::get_path(Document_Namespace::Filetype type): bad type parameter");
+}
+
+bool Document_Namespace::DocumentComparison::is_modified()
+{ 
+    return ( ( inserted.size() || removed.size() ) ? true : false ); 
 }

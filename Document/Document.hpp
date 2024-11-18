@@ -19,6 +19,7 @@ namespace Document_Namespace
         Line_Namespace::Line& operator[](int index);
 
         int size() const;
+        std::filesystem::path get_path();
     private: 
         std::filesystem::path filepath;
         std::vector<Line_Namespace::Line> lines;
@@ -54,28 +55,41 @@ namespace Document_Namespace
     }
     */
 
+    enum class Filetype
+    {
+        source, modified
+    };
+
+    enum class Linetype
+    {
+        inserted,
+        removed
+    };
+
     class DocumentComparison
     {
         public:
-            DocumentComparison(Document_Namespace::Document& original_state, Document_Namespace::Document& changed_state);
+            DocumentComparison(Document_Namespace::Document& source, Document_Namespace::Document& modified);
 
-            const std::vector<std::pair<Line_Namespace::Line, int>>& get_added_lines() { return added_lines; }
-            const std::vector<int>& get_removed_lines() { return removed_lines; }
+            std::ostream& output(std::ostream& os, Linetype type);
 
-            bool is_changed() 
-            { 
-                return ( ( added_lines.size() || removed_lines.size() ) ? true : false );
-            }
+            bool is_modified();
 
-            std::ostream& output_added_lines(std::ostream& os);
-            std::ostream& output_removed_lines(std::ostream& os);
+            // Get methods
+            std::filesystem::path get_path(Filetype type);
+            const std::vector<std::pair<Line_Namespace::Line, int>>& get_inserted() { return inserted; }
+            const std::vector<int>& get_removed() { return removed; }
         private:
-            void push_back_added_lines(Document_Namespace::Document& original_state, Document_Namespace::Document& changed_state);
-            void push_back_removed_lines(Document_Namespace::Document& original_state, Document_Namespace::Document& changed_state);
+            std::filesystem::path source_filepath;
+            std::filesystem::path modified_filepath;
+            std::vector<std::pair<Line_Namespace::Line, int>> inserted;    // stores lines that were added at index int
+            std::vector<int> removed; // stores indexes of lines that were removed
 
-            std::filesystem::path changed_state_filepath;
-            std::vector<std::pair<Line_Namespace::Line, int>> added_lines;    // stores lines that were added at index int
-            std::vector<int> removed_lines; // stores indexes of lines that were removed
+            void push_back_inserted(Document_Namespace::Document& source, Document_Namespace::Document& modified);
+            void push_back_removed(Document_Namespace::Document& source, Document_Namespace::Document& modified);
+
+            std::ostream& output_inserted(std::ostream& os);
+            std::ostream& output_removed(std::ostream& os);
     };
 
     bool contains(Document_Namespace::Document& doc, Line_Namespace::Line& line);
