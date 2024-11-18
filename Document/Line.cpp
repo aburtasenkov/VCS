@@ -1,5 +1,17 @@
 #include "Line.hpp"
 
+/*------------------------------------Line iterators---------------------------------------------------------*/
+
+Line_Namespace::Line::const_iterator Line_Namespace::Line::begin() const
+{
+    return words.begin();
+}
+
+Line_Namespace::Line::const_iterator Line_Namespace::Line::end() const
+{
+    return words.end();
+}
+
 Line_Namespace::Line::iterator Line_Namespace::Line::begin()
 {
     return words.begin();
@@ -10,10 +22,11 @@ Line_Namespace::Line::iterator Line_Namespace::Line::end()
     return words.end();
 }
 
+/*------------------------------------Line initializers---------------------------------------------------------*/
+
 Line_Namespace::Line::Line()
     :words{}
-{
-}
+{   }
 
 Line_Namespace::Line::Line(const std::string& line)
 {
@@ -29,7 +42,9 @@ Line_Namespace::Line::Line(const std::vector<std::string>& const_ref)
 {
 }
 
-bool Line_Namespace::Line::operator==(Line& other)
+/*------------------------------------Line comparison operators---------------------------------------------------------*/
+
+bool Line_Namespace::Line::operator==(const Line& other) const
 {
     // if size doesn't match
     if (size() != other.size())
@@ -38,11 +53,12 @@ bool Line_Namespace::Line::operator==(Line& other)
     return std::equal(words.begin(), words.end(), other.begin());
 }
 
-bool Line_Namespace::Line::operator!=(Line& other)
+bool Line_Namespace::Line::operator!=(const Line& other) const
 {
     return !(*this == other);
 }
 
+/*------------------------------------Line indexing---------------------------------------------------------*/
 
 std::string& Line_Namespace::Line::operator[](int index)
 // Range-checked operation
@@ -60,12 +76,16 @@ const std::string& Line_Namespace::Line::operator[](int index) const
     return words[index];
 }
 
-int Line_Namespace::Line::size()
+/*---------------------------------------------------------------------------------------------*/
+
+int Line_Namespace::Line::size() const
 {
     return words.size();
 }
 
-std::ostream& Line_Namespace::operator<<(std::ostream& os, Line& line)
+/*---------------------------------------------------------------------------------------------*/
+
+std::ostream& Line_Namespace::operator<<(std::ostream& os, const Line& line)
 {
     auto begin = line.begin();
 

@@ -10,7 +10,10 @@ namespace Line_Namespace{
         public:
             // STL - Interface
             typedef std::vector<std::string>::iterator iterator;
+            typedef std::vector<std::string>::const_iterator const_iterator;
 
+            const_iterator begin() const;
+            const_iterator end() const;
             iterator begin();
             iterator end();
             
@@ -19,15 +22,15 @@ namespace Line_Namespace{
             Line(const std::string& line);
             Line(const std::vector<std::string>& const_ref);
 
-            bool operator==(Line& other);
-            bool operator!=(Line& other);
+            bool operator==(const Line& other) const;
+            bool operator!=(const Line& other) const;
 
             std::string& operator[](int index);
             const std::string& operator[](int index) const;
-            int size();
+            int size() const;
         private:
             std::vector<std::string> words;
     };
 
-    std::ostream& operator<<(std::ostream& os, Line& line);
+    std::ostream& operator<<(std::ostream& os, const Line& line);
 }

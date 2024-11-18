@@ -1,5 +1,8 @@
 #include "Document.hpp"
 
+/*----------------------------------------Document Class-----------------------------------------------------*/
+/*----------------------------------------Document iterators-----------------------------------------------------*/
+
 Document_Namespace::Document::iterator Document_Namespace::Document::begin()
 {
     return lines.begin();
@@ -9,6 +12,18 @@ Document_Namespace::Document::iterator Document_Namespace::Document::end()
 {
     return lines.end();
 }
+
+Document_Namespace::Document::const_iterator Document_Namespace::Document::begin() const
+{
+    return lines.begin();
+}
+
+Document_Namespace::Document::const_iterator Document_Namespace::Document::end() const
+{
+    return lines.end();
+}
+
+/*--------------------------------------Document initilizers-------------------------------------------------------*/
 
 Document_Namespace::Document::Document()
 {
@@ -27,89 +42,49 @@ Document_Namespace::Document::Document(const std::filesystem::path& path_to_inpu
     }
 }
 
+/*------------------------------------Indexing---------------------------------------------------------*/
+
 Line_Namespace::Line& Document_Namespace::Document::operator[](int index)
 // range checked indexing
+// non const indexing
 {
     if (0 < index || index >= lines.size()) throw std::runtime_error{"Document::operator[](int index) - index out of range"};
     return lines[index];
 }
+
+const Line_Namespace::Line& Document_Namespace::Document::operator[](int index) const
+// range checked indexing
+// const indexing
+{
+    if (0 < index || index >= lines.size()) throw std::runtime_error{"Document::operator[](int index) - index out of range"};
+    return lines[index];
+}
+
+/*---------------------------------------------------------------------------------------------*/
 
 int Document_Namespace::Document::size() const
 {
     return lines.size();
 }
 
-std::filesystem::path Document_Namespace::Document::get_path()
+const std::filesystem::path& Document_Namespace::Document::get_path() const
 {
     return filepath;
 }
 
-Document_Namespace::DocumentComparison::DocumentComparison(Document_Namespace::Document& source, Document_Namespace::Document& modified)
-    :source_filepath(source.get_path()), modified_filepath(modified.get_path())
+/*--------------------------------------DocumentComparison Class-------------------------------------------------------*/
+/*----------------------------------------------DocumentComparison initializer-----------------------------------------------*/
+
+Document_Namespace::DocumentComparison::DocumentComparison(const Document_Namespace::Document& source, const Document_Namespace::Document& modified)
 // Compares 2 documents for changes on initialization
 {
     push_back_inserted(source, modified);
     push_back_removed(source, modified);
 }
 
-void Document_Namespace::DocumentComparison::push_back_inserted(Document_Namespace::Document& source, Document_Namespace::Document& modified)
-{
-    int index = 0;
-    // if source doesn't contain any line of modified -> new line was added to modified
-    for (auto& line : modified)
-    {
-        if (!contains(source, line))
-            inserted.push_back({line, index});
-        ++index;
-    }
-}
+/*------------------------------------------Output method---------------------------------------------------*/
 
-void Document_Namespace::DocumentComparison::push_back_removed(Document_Namespace::Document& source, Document_Namespace::Document& modified)
-{
-    int index = 0;
-    // if modified doesn't contain any line of source -> a line was removed from source
-    for (auto& line : source)
-    {
-        if (!contains(modified, line))
-            removed.push_back(index);
-        ++index;
-    }
-}
-
-bool Document_Namespace::contains(Document_Namespace::Document& doc, Line_Namespace::Line& line)
-{
-    for (auto& l : doc)
-    {
-        if (l == line)
-            return true;
-    }
-    return false;
-}
-
-
-std::ostream& Document_Namespace::DocumentComparison::output_inserted(std::ostream& os)
-{
-    os << "{ ";
-    for (auto& pair : inserted)
-    {
-        os << "{ " << pair.first << " " << pair.second << " } ";
-    }
-    os << "}";
-    return os;
-}
-
-std::ostream& Document_Namespace::DocumentComparison::output_removed(std::ostream& os)
-{
-    os << "{ ";
-    for (int index : removed)
-    {
-        os << "{ " << index << " } ";
-    }
-    os << "}";
-    return os;
-}
-
-std::ostream& Document_Namespace::DocumentComparison::output(std::ostream& os, Document_Namespace::Linetype type)
+std::ostream& Document_Namespace::DocumentComparison::output(std::ostream& os, const Document_Namespace::Linetype& type) const
 {
     if (type == Document_Namespace::Linetype::inserted)
     {
@@ -122,16 +97,71 @@ std::ostream& Document_Namespace::DocumentComparison::output(std::ostream& os, D
     else throw std::runtime_error("std::ostream& Document_Namespace::DocumentComparison::output(std::ostream& os, Document_Namespace::Linetype type): bad type parameter");
 }
 
-std::filesystem::path Document_Namespace::DocumentComparison::get_path(Document_Namespace::Filetype type)
-{
-    if (type == Document_Namespace::Filetype::source)
-        return source_filepath;
-    else if (type == Document_Namespace::Filetype::modified)
-        return modified_filepath;
-    else throw std::runtime_error("std::filesystem::path Document_Namespace::DocumentComparison::get_path(Document_Namespace::Filetype type): bad type parameter");
-}
+/*---------------------------------------------------------------------------------------------*/
 
-bool Document_Namespace::DocumentComparison::is_modified()
+bool Document_Namespace::DocumentComparison::is_modified() const
 { 
     return ( ( inserted.size() || removed.size() ) ? true : false ); 
+}
+
+/*-------------------------------------Private methods--------------------------------------------------------*/
+
+void Document_Namespace::DocumentComparison::push_back_inserted(const Document_Namespace::Document& source, const Document_Namespace::Document& modified)
+{
+    int index = 0;
+    // if source doesn't contain any line of modified -> new line was added to modified
+    for (auto& line : modified)
+    {
+        if (!contains(source, line))
+            inserted.push_back({line, index});
+        ++index;
+    }
+}
+
+void Document_Namespace::DocumentComparison::push_back_removed(const Document_Namespace::Document& source, const Document_Namespace::Document& modified)
+{
+    int index = 0;
+    // if modified doesn't contain any line of source -> a line was removed from source
+    for (auto& line : source)
+    {
+        if (!contains(modified, line))
+            removed.push_back(index);
+        ++index;
+    }
+}
+
+/*---------------------------------------------------------------------------------------------*/
+
+bool Document_Namespace::contains(const Document_Namespace::Document& doc, const Line_Namespace::Line& line)
+{
+    for (const auto& l : doc)
+    {
+        if (l == line)
+            return true;
+    }
+    return false;
+}
+
+/*-------------------------------------------private output methods--------------------------------------------------*/
+
+std::ostream& Document_Namespace::DocumentComparison::output_inserted(std::ostream& os) const
+{
+    os << "{ ";
+    for (const auto& pair : inserted)
+    {
+        os << "{ " << pair.first << " " << pair.second << " } ";
+    }
+    os << "}";
+    return os;
+}
+
+std::ostream& Document_Namespace::DocumentComparison::output_removed(std::ostream& os) const
+{
+    os << "{ ";
+    for (int index : removed)
+    {
+        os << "{ " << index << " } ";
+    }
+    os << "}";
+    return os;
 }
