@@ -14,13 +14,13 @@ namespace Document_Namespace
 
         // User - Interface
         Document();
-        Document(std::istream& is);
         Document(const std::filesystem::path& path_to_input_file);
         
         Line_Namespace::Line& operator[](int index);
 
         int size() const;
     private: 
+        std::filesystem::path filepath;
         std::vector<Line_Namespace::Line> lines;
     };
 
@@ -73,6 +73,7 @@ namespace Document_Namespace
             void push_back_added_lines(Document_Namespace::Document& original_state, Document_Namespace::Document& changed_state);
             void push_back_removed_lines(Document_Namespace::Document& original_state, Document_Namespace::Document& changed_state);
 
+            std::filesystem::path changed_state_filepath;
             std::vector<std::pair<Line_Namespace::Line, int>> added_lines;    // stores lines that were added at index int
             std::vector<int> removed_lines; // stores indexes of lines that were removed
     };

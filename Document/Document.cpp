@@ -14,20 +14,17 @@ Document_Namespace::Document::Document()
 {
 }
 
-Document_Namespace::Document::Document(std::istream& is)
+Document_Namespace::Document::Document(const std::filesystem::path& path_to_input_file)
+    :filepath(path_to_input_file)
 {
+    std::string input = static_cast<std::string>(filepath);
+    std::ifstream ifs{input};
+
     std::string line;
-    while (std::getline(is, line))
+    while (std::getline(ifs, line))
     {
         lines.push_back(Line_Namespace::Line{line});
     }
-}
-
-Document_Namespace::Document::Document(const std::filesystem::path& path_to_input_file)
-{
-    std::string input = static_cast<std::string>(path_to_input_file);
-    std::ifstream ifs{input};
-    *this = Document_Namespace::Document(ifs);  // move operator, so basically no resources wasted
 }
 
 Line_Namespace::Line& Document_Namespace::Document::operator[](int index)
