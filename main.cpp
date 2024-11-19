@@ -1,8 +1,5 @@
-#include <iostream>
-#include <fstream>
-#include <filesystem>
 #include "Exception.hpp"
-#include "./Document/Document.hpp"
+#include "Commit.hpp"
 
 // absolute filepath
 const std::filesystem::path CURRENT_PATH{std::filesystem::current_path()};
