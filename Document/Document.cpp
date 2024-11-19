@@ -72,6 +72,17 @@ const std::filesystem::path& Document_Namespace::Document::get_path() const
     return filepath;
 }
 
+/*---------------------------------------------------------------------------------------------*/
+
+std::ostream& Document_Namespace::operator<<(std::ostream& os, const Document& doc)
+{
+    for (const auto& line : doc)
+    {
+        os << line << "\n";
+    }
+    return os;
+}
+
 /*--------------------------------------DocumentComparison Class-------------------------------------------------------*/
 /*----------------------------------------------DocumentComparison initializer-----------------------------------------------*/
 

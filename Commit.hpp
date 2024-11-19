@@ -65,7 +65,15 @@ namespace Commit_Namespace
             Commit();
             void push_back(const Filechange& fc);
             std::ostream& output(std::ostream& os, const std::string& indentation = "\t") const;
+            bool is_pushed() { return state; }
+            void push() { state = commit_state::pushed; }
         private:
+            enum commit_state
+            {
+                unpushed, pushed
+            };
+            int state = 0;
+
             std::chrono::time_point<std::chrono::system_clock> timepoint;
             std::vector<Filechange> modified_files;
 

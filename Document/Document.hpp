@@ -25,56 +25,14 @@ namespace Document_Namespace
 
         int size() const;
         const std::filesystem::path& get_path() const;
+
+        friend std::ostream& operator<<(std::ostream& os, const Document& doc);
     private: 
         std::filesystem::path filepath;
         std::vector<Line_Namespace::Line> lines;
     };
 
-    /*
-    Document changes pattern stored in .change files that are named by hash value of commit:
-
-    A single Commit followed by another commit:
-    {
-        HASH { 
-            SOURCE_FILEPATH
-            MODIFIED_FILEPATH
-                { INDEX INDEX } 
-                { 
-                { ADDED_LINE INDEX } 
-                { ADDED_LINE INDEX } 
-                } 
-             }
-             {
-            SOURCE_FILEPATH
-            MODIFIED_FILEPATH
-                { INDEX INDEX } 
-                { 
-                { ADDED_LINE INDEX } 
-                { ADDED_LINE INDEX } 
-                } 
-             }
-    }
-    {
-        HASH { 
-            SOURCE_FILEPATH
-            MODIFIED_FILEPATH
-                { INDEX INDEX } 
-                { 
-                { ADDED_LINE INDEX } 
-                { ADDED_LINE INDEX } 
-                } 
-             }
-             {
-            SOURCE_FILEPATH
-            MODIFIED_FILEPATH
-                { INDEX INDEX } 
-                { 
-                { ADDED_LINE INDEX } 
-                { ADDED_LINE INDEX } 
-                } 
-             }
-    }
-    */
+    std::ostream& operator<<(std::ostream& os, const Document& doc);
 
     enum class Linetype
     {
