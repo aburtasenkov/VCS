@@ -1,3 +1,4 @@
+#include <chrono>
 #include "./Document/Document.hpp"
 
 namespace Commit_Namespace
@@ -61,11 +62,13 @@ namespace Commit_Namespace
 
     class Commit{
         public:
-            Commit() {  }
+            Commit();
             void push_back(const Filechange& fc);
             std::ostream& output(std::ostream& os, const std::string& indentation = "\t") const;
         private:
-            std::string hash_value;
+            std::chrono::time_point<std::chrono::system_clock> timepoint;
             std::vector<Filechange> modified_files;
+
+            int hash() const;
     };
 }
