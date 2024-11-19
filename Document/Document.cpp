@@ -149,7 +149,7 @@ std::ostream& Document_Namespace::DocumentComparison::output_inserted(std::ostre
     os << "{ ";
     for (const auto& pair : inserted)
     {
-        os << indentation << "{ " << pair.first << " " << pair.second << " } ";
+        os << indentation << "{ { " << pair.first << " } " << pair.second << " } ";
     }
     os << indentation << "}";
     return os;
