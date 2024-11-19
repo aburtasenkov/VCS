@@ -76,7 +76,7 @@ namespace Document_Namespace
             DocumentComparison() {  }
             DocumentComparison(const Document_Namespace::Document& source, const Document_Namespace::Document& modified);
 
-            std::ostream& output(std::ostream& os, const Linetype& type) const ;
+            std::ostream& output(std::ostream& os, const Linetype& type, const std::string& indentation = "") const ;
 
             bool is_modified() const;
         private:
@@ -86,7 +86,7 @@ namespace Document_Namespace
             void push_back_inserted(const Document& source, const Document& modified);
             void push_back_removed(const Document& source, const Document& modified);
 
-            std::ostream& output_inserted(std::ostream& os) const;
+            std::ostream& output_inserted(std::ostream& os, const std::string& indentation = "") const;
             std::ostream& output_removed(std::ostream& os) const;
     };
 

@@ -51,7 +51,9 @@ namespace Commit_Namespace
         public:
             Commit() {  }
             void push_back(const Filechange& fc);
+            std::ostream& output(std::ostream& os, const std::string& indentation = "\t") const;
         private:
+            std::string hash_value;
             std::vector<Filechange> modified_files;
     };
 }

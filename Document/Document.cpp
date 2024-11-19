@@ -84,11 +84,11 @@ Document_Namespace::DocumentComparison::DocumentComparison(const Document_Namesp
 
 /*------------------------------------------Output method---------------------------------------------------*/
 
-std::ostream& Document_Namespace::DocumentComparison::output(std::ostream& os, const Document_Namespace::Linetype& type) const
+std::ostream& Document_Namespace::DocumentComparison::output(std::ostream& os, const Document_Namespace::Linetype& type, const std::string& indentation) const
 {
     if (type == Document_Namespace::Linetype::inserted)
     {
-        return output_inserted(os);
+        return output_inserted(os, indentation);
     }
     else if (type == Document_Namespace::Linetype::removed)
     {
@@ -144,14 +144,14 @@ bool Document_Namespace::contains(const Document_Namespace::Document& doc, const
 
 /*-------------------------------------------private output methods--------------------------------------------------*/
 
-std::ostream& Document_Namespace::DocumentComparison::output_inserted(std::ostream& os) const
+std::ostream& Document_Namespace::DocumentComparison::output_inserted(std::ostream& os, const std::string& indentation) const
 {
     os << "{ ";
     for (const auto& pair : inserted)
     {
-        os << "{ " << pair.first << " " << pair.second << " } ";
+        os << indentation << "{ " << pair.first << " " << pair.second << " } ";
     }
-    os << "}";
+    os << indentation << "}";
     return os;
 }
 
@@ -160,7 +160,7 @@ std::ostream& Document_Namespace::DocumentComparison::output_removed(std::ostrea
     os << "{ ";
     for (int index : removed)
     {
-        os << "{ " << index << " } ";
+        os << index << " ";
     }
     os << "}";
     return os;
