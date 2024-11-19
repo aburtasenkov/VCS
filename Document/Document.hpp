@@ -39,13 +39,19 @@ namespace Document_Namespace
             SOURCE_FILEPATH
             MODIFIED_FILEPATH
                 { INDEX INDEX } 
-                { { ADDED_LINE INDEX } { ADDED_LINE INDEX } } 
+                { 
+                { ADDED_LINE INDEX } 
+                { ADDED_LINE INDEX } 
+                } 
              }
              {
             SOURCE_FILEPATH
             MODIFIED_FILEPATH
                 { INDEX INDEX } 
-                { { ADDED_LINE INDEX } { ADDED_LINE INDEX } } 
+                { 
+                { ADDED_LINE INDEX } 
+                { ADDED_LINE INDEX } 
+                } 
              }
     }
     {
@@ -53,13 +59,19 @@ namespace Document_Namespace
             SOURCE_FILEPATH
             MODIFIED_FILEPATH
                 { INDEX INDEX } 
-                { { ADDED_LINE INDEX } { ADDED_LINE INDEX } } 
+                { 
+                { ADDED_LINE INDEX } 
+                { ADDED_LINE INDEX } 
+                } 
              }
              {
             SOURCE_FILEPATH
             MODIFIED_FILEPATH
                 { INDEX INDEX } 
-                { { ADDED_LINE INDEX } { ADDED_LINE INDEX } } 
+                { 
+                { ADDED_LINE INDEX } 
+                { ADDED_LINE INDEX } 
+                } 
              }
     }
     */
