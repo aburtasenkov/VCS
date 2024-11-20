@@ -8,8 +8,8 @@ namespace Document_Namespace
     class Document{
     public:
         // STL - Interface
-        typedef std::vector<Line_Namespace::Line>::iterator iterator;
-        typedef std::vector<Line_Namespace::Line>::const_iterator const_iterator;
+        typedef std::vector<std::string>::iterator iterator;
+        typedef std::vector<std::string>::const_iterator const_iterator;
         iterator begin();
         iterator end();
 
@@ -20,8 +20,8 @@ namespace Document_Namespace
         Document();
         Document(const std::filesystem::path& path_to_input_file);
         
-        Line_Namespace::Line& operator[](int index);
-        const Line_Namespace::Line& operator[](int index) const;
+        std::string& operator[](int index);
+        const std::string& operator[](int index) const;
 
         int size() const;
         const std::filesystem::path& get_path() const;
@@ -29,7 +29,7 @@ namespace Document_Namespace
         friend std::ostream& operator<<(std::ostream& os, const Document& doc);
     private: 
         std::filesystem::path filepath;
-        std::vector<Line_Namespace::Line> lines;
+        std::vector<std::string> lines;
     };
 
     std::ostream& operator<<(std::ostream& os, const Document& doc);
@@ -50,7 +50,7 @@ namespace Document_Namespace
 
             bool is_modified() const;
         private:
-            std::vector<std::pair<Line_Namespace::Line, int>> inserted;    // stores lines that were added at index int
+            std::vector<std::pair<std::string, int>> inserted;    // stores lines that were added at index int
             std::vector<int> removed; // stores indexes of lines that were removed
 
             void push_back_inserted(const Document& source, const Document& modified);
@@ -60,5 +60,5 @@ namespace Document_Namespace
             std::ostream& output_removed(std::ostream& os) const;
     };
 
-    bool contains(const Document_Namespace::Document& doc, const Line_Namespace::Line& line);
+    bool contains(const Document_Namespace::Document& doc, const std::string& line);
 }

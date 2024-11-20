@@ -38,13 +38,13 @@ Document_Namespace::Document::Document(const std::filesystem::path& path_to_inpu
     std::string line;
     while (std::getline(ifs, line))
     {
-        lines.push_back(Line_Namespace::Line{line});
+        lines.push_back(line);
     }
 }
 
 /*------------------------------------Indexing---------------------------------------------------------*/
 
-Line_Namespace::Line& Document_Namespace::Document::operator[](int index)
+std::string& Document_Namespace::Document::operator[](int index)
 // range checked indexing
 // non const indexing
 {
@@ -52,7 +52,7 @@ Line_Namespace::Line& Document_Namespace::Document::operator[](int index)
     return lines[index];
 }
 
-const Line_Namespace::Line& Document_Namespace::Document::operator[](int index) const
+const std::string& Document_Namespace::Document::operator[](int index) const
 // range checked indexing
 // const indexing
 {
@@ -143,7 +143,7 @@ void Document_Namespace::DocumentComparison::push_back_removed(const Document_Na
 
 /*---------------------------------------------------------------------------------------------*/
 
-bool Document_Namespace::contains(const Document_Namespace::Document& doc, const Line_Namespace::Line& line)
+bool Document_Namespace::contains(const Document_Namespace::Document& doc, const std::string& line)
 {
     for (const auto& l : doc)
     {
