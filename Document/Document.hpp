@@ -1,7 +1,12 @@
 #include <list>
 #include <filesystem>
 #include <fstream>
-#include "Line.hpp"
+#include <vector>
+#include <stdexcept>
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <algorithm>
 
 namespace Document_Namespace
 {
