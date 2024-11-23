@@ -6,7 +6,8 @@ const std::filesystem::path CURRENT_PATH{std::filesystem::current_path()};
 
 // filepath in relation to CURRENT_PATH
 const std::filesystem::path VCS_PATH{"VCS/"}; 
-const std::filesystem::path VCS_CHANGED_STATE_FILE_PATH{"current_state/"};
+const std::filesystem::path VCS_COMMITED_STATE{"commited_state/"};
+const std::filesystem::path VCS_STAGED_STATE{"staged state/"};
 const std::filesystem::path VCS_IGNORE{"ignore"};
 const std::filesystem::path VCS_CACHE{"cache"};
 
@@ -58,10 +59,12 @@ void read_from_directory(const std::filesystem::path& source_directory, const st
 
 void copy_file_to_directory(const std::filesystem::path& source, const std::filesystem::path& copy_directory)
 {
+    if (!std::filesystem::exists(source))
+        throw Exception{"Missing File Error: File to stage does not exist in directory", {"main.cpp", 64}};
     Document_Namespace::Document doc{source};
     std::ofstream ofs {copy_directory/source};
     if (!ofs.good()) 
-        throw Exception{"Reading-Error: could not open file to write", {"main.cpp", 64}};
+        throw Exception{"Reading-Error: could not open file to write", {"main.cpp", 67}};
     ofs << doc;
 }
 
@@ -75,7 +78,7 @@ void create_repo_cache(const std::string& repository_name)
 Repository* read_cache()
 {
     if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
-        throw Exception{"Missing File Error: Repository uninitialized", {"main.cpp", 79}};
+        throw Exception{"Missing File Error: Repository uninitialized", {"main.cpp", 80}};
 
     Repository* repo = new Repository{};
 
@@ -87,7 +90,8 @@ void initialize(const std::string& repository_name)
 {
     // Create VCS directories
     std::filesystem::create_directory(CURRENT_PATH/VCS_PATH);
-    std::filesystem::create_directory(CURRENT_PATH/VCS_PATH/VCS_CHANGED_STATE_FILE_PATH);
+    std::filesystem::create_directory(CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE);
+    std::filesystem::create_directory(CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE);
 
     // cache for repository data
     if (std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
@@ -99,21 +103,9 @@ void initialize(const std::string& repository_name)
 }
 
 void add(Repository* repo, const std::filesystem::path& source_path)
-// add file to next commit
+// Move file to staged state
 {
-    if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CHANGED_STATE_FILE_PATH/source_path))
-    {
-        copy_file_to_directory(source_path, CURRENT_PATH/VCS_PATH/VCS_CHANGED_STATE_FILE_PATH);
-        #define modified_path source_path
-    }
-    else 
-        std::filesystem::path modified_path {CURRENT_PATH/VCS_PATH/VCS_CHANGED_STATE_FILE_PATH/source_path};
-    Document_Namespace::Document source{source_path};
-    Document_Namespace::Document modified{modified_path};
-    #undef modified_path
-    Commit_Namespace::Filechange changes{source, modified};
-    Commit_Namespace::Commit commit{};
-    commit.push_back(changes); 
+    copy_file_to_directory(source_path, CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE);
 }
 
 int main(int argc, char** argv)
