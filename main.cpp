@@ -91,6 +91,7 @@ void add(const std::filesystem::path& source_path)
     Commit_Namespace::Filechange changes{source, modified};
     Commit_Namespace::Commit commit{};
     commit.push_back(changes);
+    #undef modified_path;
 }
 
 int main(int argc, char** argv)
