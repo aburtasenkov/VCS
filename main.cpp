@@ -1,13 +1,14 @@
 #include "Exception.hpp"
-#include "Commit.hpp"
+#include "Repository.hpp"
 
 // absolute filepath
 const std::filesystem::path CURRENT_PATH{std::filesystem::current_path()};
 
 // filepath in relation to CURRENT_PATH
 const std::filesystem::path VCS_PATH{"VCS/"}; 
-const std::filesystem::path VCS_IGNORE{"ignore"};
 const std::filesystem::path VCS_CHANGED_STATE_FILE_PATH{"current_state/"};
+const std::filesystem::path VCS_IGNORE{"ignore"};
+const std::filesystem::path VCS_CACHE{"cache"};
 
 // VCS input commands
 const std::string INIT = "init";
@@ -17,8 +18,6 @@ const std::string ADD = "add";
 const int INPUT_COMMAND_INDEX = 1;
 const int MIN_INPUT_ARGUMENTS = 2;
 const std::string CURRENT_FILENAME = "main.cpp";
-
-std::vector<Commit_Namespace::Commit> commits;
 
 void output_directory_files(std::ostream& os, const std::filesystem::path& directory, const std::string& exception = ".git", const std::string& tabulation = "")
 // Output all files to os
@@ -62,8 +61,31 @@ void copy_file_to_directory(const std::filesystem::path& source, const std::file
     Document_Namespace::Document doc{source};
     std::ofstream ofs {copy_directory/source};
     if (!ofs.good()) 
-        throw Exception{"copy_file_to_directory: could not open file to write", {"main.cpp", 64}};
+        throw Exception{"Reading-Error: could not open file to write", {"main.cpp", 64}};
     ofs << doc;
+}
+
+void create_repo_cache(const std::string& repository_name)
+// initialize cache files for a repository
+{
+    std::ofstream ofs{CURRENT_PATH/VCS_PATH/VCS_CACHE};
+    ofs << repository_name << "\n";
+}
+
+Repository* read_cache()
+{
+    if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
+        throw Exception{"Missing File Error: Repository uninitialized", {"main.cpp", 79}};
+
+    std::ifstream ifs{CURRENT_PATH/VCS_PATH/VCS_CACHE};
+    if (!ifs.good())
+        throw Exception{"Reading Error: Could not open file to write", {"main.cpp", 82}};
+
+    std::string repo_name;
+
+    ifs >> repo_name;
+
+    return new Repository{repo_name}; ;
 }
 
 void initialize(const std::string& repository_name)
@@ -72,6 +94,11 @@ void initialize(const std::string& repository_name)
     // Create VCS directories
     std::filesystem::create_directory(CURRENT_PATH/VCS_PATH);
     std::filesystem::create_directory(CURRENT_PATH/VCS_PATH/VCS_CHANGED_STATE_FILE_PATH);
+
+    // cache for repository data
+    if (std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
+        throw Exception{"Invalid Initialization: Repository already initialized", {"main.cpp", 100}};
+    create_repo_cache(repository_name);
 
     std::ofstream ofs {CURRENT_PATH/VCS_PATH/VCS_IGNORE}; // Create VCS ignore file
     output_directory_files(ofs, CURRENT_PATH);
@@ -90,8 +117,8 @@ void add(const std::filesystem::path& source_path)
     Document_Namespace::Document modified{modified_path};
     Commit_Namespace::Filechange changes{source, modified};
     Commit_Namespace::Commit commit{};
-    commit.push_back(changes);
-    #undef modified_path;
+    // commit.push_back(changes);  // Change for Resitory object method
+    #undef modified_path
 }
 
 int main(int argc, char** argv)
@@ -105,8 +132,13 @@ try
 
     if (INPUT_CURRENT_COMMAND == INIT)
         initialize(argv[INPUT_COMMAND_INDEX + 1]);
+
+    Repository* repo = read_cache();
+
     if (INPUT_CURRENT_COMMAND == ADD)
         add(argv[INPUT_COMMAND_INDEX + 1]);
+
+    delete repo;
 
     return 0;
 }
