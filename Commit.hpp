@@ -36,13 +36,7 @@ namespace Commit_Namespace
                 } 
              }
              {
-            SOURCE_FILEPATH
-            MODIFIED_FILEPATH
-                { INDEX INDEX } 
-                { 
-                { ADDED_LINE INDEX } 
-                { ADDED_LINE INDEX } 
-                } 
+            SOURCE_FILEPATHCommit
              }
     }    
     */
@@ -64,7 +58,7 @@ namespace Commit_Namespace
         public:
             Commit();
             void push_back(const Filechange& fc);
-            std::ostream& output(std::ostream& os, const std::string& indentation = "\t") const;
+            friend std::ostream& operator<<(std::ostream& os, const Commit& c);
             bool is_pushed() const { return state; }
             void push() { state = commit_state::pushed; }
         private:
@@ -79,4 +73,5 @@ namespace Commit_Namespace
 
             int hash() const;
     };
+    std::ostream& operator<<(std::ostream& os, const Commit& c);
 }

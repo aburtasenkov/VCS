@@ -12,26 +12,23 @@ void Commit_Namespace::Commit::push_back(const Commit_Namespace::Filechange& fc)
     modified_files.push_back(fc);
 }
 
-/*-----------------------------------------------------------------------------------------------------------------------*/
-
-std::ostream& Commit_Namespace::Commit::output(std::ostream& os, const std::string& indentation) const
-{
-    os << "{ " << hash() << "\n";
-    for (const Filechange& file : modified_files)
-    {
-        os << indentation << "{\n";
-        os << indentation << file.source.get_path() << "\n";
-        os << indentation << file.modified.get_path() << "\n";
-        os << indentation << indentation; file.changes.output(std::cout, Document_Namespace::Linetype::removed); os << "\n\t\t";
-        file.changes.output(std::cout, Document_Namespace::Linetype::inserted, "\n\t\t"); os << "\n";
-        os << indentation << "}\n";
-    }
-    return os << "}";
-}
-
 /*-------------------------------------------Private member methods----------------------------------------------------------------------------*/
 
 int Commit_Namespace::Commit::hash() const
 {
     return timepoint.time_since_epoch().count();
+}
+
+std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Commit& c)
+{
+    os << "{ " << c.hash() << " ";
+    for (const Filechange& file : c.modified_files)
+    {
+        os << "{ ";
+        os << file.source.get_path() << " ";
+        os << file.modified.get_path() << " ";
+        os << file.changes;
+        os << " } ";
+    }
+    return os << "}";
 }
