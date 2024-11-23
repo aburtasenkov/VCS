@@ -14,48 +14,19 @@ const std::filesystem::path VCS_CACHE{"cache"};
 // VCS input commands
 const std::string INIT = "init";
 const std::string ADD = "add";
+const std::string COMMIT = "commit";
 
 // magic constants
 const int INPUT_COMMAND_INDEX = 1;
 const int MIN_INPUT_ARGUMENTS = 2;
 const std::string CURRENT_FILENAME = "main.cpp";
 
-void output_directory_files(std::ostream& os, const std::filesystem::path& directory, const std::string& exception = ".git", const std::string& tabulation = "")
-// Output all files to os
-// If variable directory is a directory call output_directory on it with extra "    " tabulation for visibility
-// Pre-Condition: directory exists in PC memory
-{
-    for (const auto& path : std::filesystem::directory_iterator{directory})
-    {
-        if (path.is_directory())
-        {
-            if (!(path.path() == directory/exception))
-                output_directory_files(os, path, exception, tabulation + "    ");
-        }
-        else
-            os << tabulation << path << std::endl;
-    }
-}
-
-void read_from_directory(const std::filesystem::path& source_directory, const std::filesystem::path& copy_directory, const std::string& exception = ".git")
-// Copy each file from source_directory to copy_directory
-// Pre-Condition: copy_directory exists in PC memory
-{
-    // iterate through each file in source_directory
-    for (const auto& path : std::filesystem::directory_iterator{source_directory})
-    {
-        // if the path is a directory - copy the directory to copy_directory
-        if (path.is_directory())
-        {
-            if (!(path.path() == source_directory/exception))
-                read_from_directory(path, copy_directory/path);
-        }
-        else
-        {
-            Document_Namespace::Document file{path.path()};
-        }
-    }
-}
+void copy_file_to_directory(const std::filesystem::path& source, const std::filesystem::path& copy_directory);
+void create_repo_cache(const std::string& repository_name);
+Repository* read_cache();
+void initialize(const std::string& repository_name);
+void add(Repository* repo, const std::filesystem::path& source_path);
+void commit(Repository* repo, const std::string& commit_message);
 
 void copy_file_to_directory(const std::filesystem::path& source, const std::filesystem::path& copy_directory)
 {
@@ -99,13 +70,17 @@ void initialize(const std::string& repository_name)
     create_repo_cache(repository_name);
 
     std::ofstream ofs {CURRENT_PATH/VCS_PATH/VCS_IGNORE}; // Create VCS ignore file
-    output_directory_files(ofs, CURRENT_PATH);
 }
 
 void add(Repository* repo, const std::filesystem::path& source_path)
 // Move file to staged state
 {
     copy_file_to_directory(source_path, CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE);
+}
+
+void commit(Repository* repo, const std::string& commit_message)
+{
+
 }
 
 int main(int argc, char** argv)
@@ -124,6 +99,8 @@ try
 
     if (INPUT_CURRENT_COMMAND == ADD)
         add(repo, argv[INPUT_COMMAND_INDEX + 1]);
+    if (INPUT_CURRENT_COMMAND == COMMIT)
+        commit(repo, argv[INPUT_COMMAND_INDEX + 1]);
 
     delete repo;
 
