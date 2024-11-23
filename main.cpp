@@ -20,7 +20,7 @@ const std::string CURRENT_FILENAME = "main.cpp";
 
 std::vector<Commit_Namespace::Commit> commits;
 
-void output_directory_files(std::ostream& os, std::filesystem::path directory, std::string exception = ".git", std::string tabulation = "")
+void output_directory_files(std::ostream& os, const std::filesystem::path& directory, const std::string& exception = ".git", const std::string& tabulation = "")
 // Output all files to os
 // If variable directory is a directory call output_directory on it with extra "    " tabulation for visibility
 // Pre-Condition: directory exists in PC memory
@@ -37,7 +37,7 @@ void output_directory_files(std::ostream& os, std::filesystem::path directory, s
     }
 }
 
-void read_from_directory(std::filesystem::path source_directory, std::filesystem::path copy_directory, std::string exception = ".git")
+void read_from_directory(const std::filesystem::path& source_directory, const std::filesystem::path& copy_directory, const std::string& exception = ".git")
 // Copy each file from source_directory to copy_directory
 // Pre-Condition: copy_directory exists in PC memory
 {
@@ -57,7 +57,7 @@ void read_from_directory(std::filesystem::path source_directory, std::filesystem
     }
 }
 
-void copy_file_to_directory(std::filesystem::path source, std::filesystem::path copy_directory)
+void copy_file_to_directory(const std::filesystem::path& source, const std::filesystem::path& copy_directory)
 {
     Document_Namespace::Document doc{source};
     std::ofstream ofs {copy_directory/source};
@@ -66,7 +66,7 @@ void copy_file_to_directory(std::filesystem::path source, std::filesystem::path 
     ofs << doc;
 }
 
-void initialize(std::string repository_name)
+void initialize(const std::string& repository_name)
 // initialize a VCS system
 {
     // Create VCS directories
@@ -77,7 +77,7 @@ void initialize(std::string repository_name)
     output_directory_files(ofs, CURRENT_PATH);
 }
 
-void add(std::filesystem::path source_path)
+void add(const std::filesystem::path& source_path)
 {
     if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CHANGED_STATE_FILE_PATH/source_path))
     {

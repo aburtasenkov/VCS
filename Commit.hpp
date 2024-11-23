@@ -1,5 +1,5 @@
 #include <chrono>
-#include "./Document/Document.hpp"
+#include "Document.hpp"
 
 namespace Commit_Namespace
 {
