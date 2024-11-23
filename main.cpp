@@ -77,15 +77,9 @@ Repository* read_cache()
     if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
         throw Exception{"Missing File Error: Repository uninitialized", {"main.cpp", 79}};
 
-    std::ifstream ifs{CURRENT_PATH/VCS_PATH/VCS_CACHE};
-    if (!ifs.good())
-        throw Exception{"Reading Error: Could not open file to write", {"main.cpp", 82}};
+    Repository* repo = new Repository{};
 
-    std::string repo_name;
-
-    ifs >> repo_name;
-
-    return new Repository{repo_name}; ;
+    return repo;
 }
 
 void initialize(const std::string& repository_name)
@@ -104,7 +98,8 @@ void initialize(const std::string& repository_name)
     output_directory_files(ofs, CURRENT_PATH);
 }
 
-void add(const std::filesystem::path& source_path)
+void add(Repository* repo, const std::filesystem::path& source_path)
+// add file to next commit
 {
     if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CHANGED_STATE_FILE_PATH/source_path))
     {
@@ -115,10 +110,10 @@ void add(const std::filesystem::path& source_path)
         std::filesystem::path modified_path {CURRENT_PATH/VCS_PATH/VCS_CHANGED_STATE_FILE_PATH/source_path};
     Document_Namespace::Document source{source_path};
     Document_Namespace::Document modified{modified_path};
+    #undef modified_path
     Commit_Namespace::Filechange changes{source, modified};
     Commit_Namespace::Commit commit{};
-    // commit.push_back(changes);  // Change for Resitory object method
-    #undef modified_path
+    commit.push_back(changes); 
 }
 
 int main(int argc, char** argv)
@@ -136,7 +131,7 @@ try
     Repository* repo = read_cache();
 
     if (INPUT_CURRENT_COMMAND == ADD)
-        add(argv[INPUT_COMMAND_INDEX + 1]);
+        add(repo, argv[INPUT_COMMAND_INDEX + 1]);
 
     delete repo;
 
