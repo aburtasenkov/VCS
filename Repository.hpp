@@ -18,8 +18,7 @@ private:
 };
 
 Repository::Repository(const std::string& repo_name)
-    :name(repo_name)
-{   }
+    :name(repo_name)    {   }
 
 void Repository::add_commit(const Commit_Namespace::Commit& com)
 {
@@ -27,13 +26,22 @@ void Repository::add_commit(const Commit_Namespace::Commit& com)
 }
 
 std::istream& operator>>(std::istream& is, Repository& repo)
+// Input data into Repository
 {
     is >> repo.name;
-    // Input already made commits that are saved in cache
+    char ch;
+    while (is >> ch)
+    {
+        is.putback(ch);
+        Commit_Namespace::Commit commit{};
+        is >> commit;
+        repo.add_commit(commit);
+    }
     return is;
 }
 
 std::ostream& operator<<(std::ostream& os, const Repository& repo)
+// output Repository data
 {
     os << repo.name << "\n";;
     for (auto& commit : repo.commits)
