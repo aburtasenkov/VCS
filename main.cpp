@@ -21,22 +21,17 @@ const int INPUT_COMMAND_INDEX = 1;
 const int MIN_INPUT_ARGUMENTS = 2;
 const std::string CURRENT_FILENAME = "main.cpp";
 
-void copy_file_to_directory(const std::filesystem::path& source, const std::filesystem::path& copy_directory);
-Repository* read_cache();
-void initialize(const std::string& repository_name);
-void commit(Repository* repo, const std::string& commit_message);
-
 void copy_file_to_directory(const std::filesystem::path& source, const std::filesystem::path& copy_directory)
 {
     if (!std::filesystem::exists(source))
-        throw Exception{"Missing File Error: File to stage does not exist in directory", {"main.cpp", 34}};
+        throw Exception{"Missing File Error: File to stage does not exist in directory", CURRENT_FILENAME};
     std::filesystem::copy(source, copy_directory);
 }
 
 Repository* read_cache()
 {
     if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
-        throw Exception{"Missing File Error: Repository uninitialized", {"main.cpp", 48}};
+        throw Exception{"Missing File Error: Repository uninitialized", CURRENT_FILENAME};
 
     std::ifstream ifs{CURRENT_PATH/VCS_PATH/VCS_CACHE};
 
@@ -66,7 +61,7 @@ void initialize(const std::string& repository_name)
 
     // cache for repository data
     if (std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
-        throw Exception{"Invalid Initialization: Repository already initialized", {"main.cpp", 71}};
+        throw Exception{"Invalid Initialization: Repository already initialized", CURRENT_FILENAME};
     Repository repo{repository_name};
     save_cache(&repo);
 
@@ -117,7 +112,7 @@ void commit(Repository* repo, const std::string& commit_message)
     repo->add_commit(commit);
 
     if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
-        throw Exception{"Missing File Error: Repository uninitialized", {"main.cpp", 126}};
+        throw Exception{"Missing File Error: Repository uninitialized", CURRENT_FILENAME};
     save_cache(repo);
 }
 
@@ -126,7 +121,7 @@ try
 {    
     // argv should at least contain a string after executable name
     if (argc < MIN_INPUT_ARGUMENTS)
-        throw Exception{"Syntax-Error: Bad Command Line Input", {CURRENT_FILENAME, 126}};
+        throw Exception{"Syntax-Error: Bad Command Line Input", CURRENT_FILENAME};
 
     std::string INPUT_CURRENT_COMMAND = argv[INPUT_COMMAND_INDEX];
 
@@ -149,6 +144,6 @@ try
 catch (Exception& except)
 {
     std::cerr << except.what() << std::endl
-    << "\t" << except.location().first << ":" << except.location().second << std::endl;
+    << "\t" << except.where() << std::endl;
     return 1;
 }

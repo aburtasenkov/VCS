@@ -11,8 +11,8 @@ public:
         :error_msg(s)
     {   }
 
-    explicit Exception(std::string s, std::pair<std::string, int> location)
-        :error_msg(s), error_location(location)
+    explicit Exception(std::string s, std::string f)
+        :error_msg(s), error_location(f)
     {   }
 
     virtual ~Exception() noexcept
@@ -23,11 +23,11 @@ public:
         return error_msg.c_str();
     }
 
-    virtual const std::pair<const std::string, const int> location() const noexcept
+    virtual const std::string where() const noexcept
     {
         return error_location;
     }
 protected:
     std::string error_msg;
-    std::pair<const std::string, const int> error_location;
+    std::string error_location;
 };
