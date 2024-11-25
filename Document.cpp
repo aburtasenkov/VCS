@@ -142,30 +142,26 @@ bool Document_Namespace::contains(const Document_Namespace::Document& doc, const
 
 std::ostream& Document_Namespace::DocumentComparison::output_inserted(std::ostream& os) const
 {
-    os << "{ ";
     for (const auto& pair : inserted)
     {
         os << "{ { " << pair.first << " } " << pair.second << " } ";
     }
-    os << "}";
     return os;
 }
 
 std::ostream& Document_Namespace::DocumentComparison::output_removed(std::ostream& os) const
 {
-    os << "{ ";
     for (const auto& pair : removed)
     {
         os << "{ { " << pair.first << " } " << pair.second << " } ";
     }
-    os << "}";
     return os;
 }
 
 std::ostream& Document_Namespace::operator<<(std::ostream& os, const Document_Namespace::DocumentComparison& changes)
 {
     changes.output_inserted(os);
-    os << "\t";
+    os << "\n";
     changes.output_removed(os);
     return os;
 }
