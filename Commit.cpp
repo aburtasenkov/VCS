@@ -3,7 +3,10 @@
 /*--------------------------------Commit Initializers----------------------------------------------------------------------------*/
 
 Commit_Namespace::Commit::Commit()
-    :timepoint(std::chrono::system_clock::now().time_since_epoch())    {   }
+    :commit_message("NO_MESSAGE"), commit_timepoint(std::chrono::system_clock::now().time_since_epoch())   {   }
+
+Commit_Namespace::Commit::Commit(const std::string& message)
+    :commit_message(message), commit_timepoint(std::chrono::system_clock::now().time_since_epoch())    {   }
 
 /*-----------------------------------------------------------------------------------------------------------------------*/
 
@@ -16,7 +19,7 @@ void Commit_Namespace::Commit::push_back(const Commit_Namespace::Filechange& fc)
 
 int Commit_Namespace::Commit::hash() const
 {
-    return timepoint.time_since_epoch().count();
+    return commit_timepoint.time_since_epoch().count();
 }
 
 std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Commit& c)
