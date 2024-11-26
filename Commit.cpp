@@ -29,15 +29,14 @@ std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Commit& c)
 
 std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Filechange& c)
 {
-    os << "{ ";
-    os << c.source << " ";
-    os << c.modified << " ";
+    os << c.source << " " << c.modified << "\n";
     os << c.changes;
-    os << " } ";
     return os;
 }
 
 std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 {
-
+    is >> c.source >> c.modified;
+    is >> c.changes;
+    return is;
 }
