@@ -160,8 +160,8 @@ std::ostream& Document_Namespace::DocumentComparison::output_removed(std::ostrea
 
 std::ostream& Document_Namespace::operator<<(std::ostream& os, const Document_Namespace::DocumentComparison& changes)
 {
-    changes.output_inserted(os);
-    os << "\n";
     changes.output_removed(os);
+    os << "\n";
+    changes.output_inserted(os);
     return os;
 }
