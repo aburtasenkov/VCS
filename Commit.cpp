@@ -36,7 +36,24 @@ std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Filechange& c
 
 std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 {
+    std::string line;
     is >> c.source >> c.modified;
+    std::getline(is, line, '\n');
     is >> c.changes;
+    return is;
+}
+
+std::istream& Commit_Namespace::operator>>(std::istream& is, Commit& c)
+{
+    c.modified_files.clear();
+    char ch;
+    is >> c.hash_index >> c.commit_message;
+    while (is >> ch)
+    {
+        is.putback(ch);
+        Filechange changes;
+        is >> changes;
+        c.push_back(changes);
+    }
     return is;
 }

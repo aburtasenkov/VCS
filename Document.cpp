@@ -173,6 +173,7 @@ std::istream& Document_Namespace::operator>>(std::istream& is, DocumentCompariso
     std::string line;
     int line_index;
 
+    std::getline(is, line);
     std::istringstream removed_lines{line};
     while (removed_lines >> ch)
     {

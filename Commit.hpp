@@ -32,6 +32,7 @@ namespace Commit_Namespace
             Commit(const std::string& message);
             void push_back(const Filechange& fc);
             friend std::ostream& operator<<(std::ostream& os, const Commit& c);
+            friend std::istream& operator>>(std::istream& is, Commit& c);
             bool is_pushed() const { return state; }
             void push() { state = commit_state::pushed; }
         private:
@@ -48,4 +49,5 @@ namespace Commit_Namespace
     std::ostream& operator<<(std::ostream& os, const Commit& c);
     std::ostream& operator<<(std::ostream& os, const Filechange& c);
     std::istream& operator>>(std::istream& is, Filechange& c);
+    std::istream& operator>>(std::istream& is, Commit& c);
 }
