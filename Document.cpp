@@ -144,7 +144,7 @@ std::ostream& Document_Namespace::DocumentComparison::output_inserted(std::ostre
 {
     for (const auto& pair : inserted)
     {
-        os << "{ { " << pair.first << " } " << pair.second << " } ";
+        os << "{{" << pair.first << "}" << pair.second << "}";
     }
     return os;
 }
@@ -153,7 +153,7 @@ std::ostream& Document_Namespace::DocumentComparison::output_removed(std::ostrea
 {
     for (const auto& pair : removed)
     {
-        os << "{ { " << pair.first << " } " << pair.second << " } ";
+        os << "{{" << pair.first << "}" << pair.second << "}";
     }
     return os;
 }
@@ -164,4 +164,39 @@ std::ostream& Document_Namespace::operator<<(std::ostream& os, const Document_Na
     os << "\n";
     changes.output_inserted(os);
     return os;
+}
+
+std::istream& Document_Namespace::operator>>(std::istream& is, DocumentComparison& changes)
+{
+    changes.clear();    // clear because vectors arent changed, only modified
+    char ch;
+    std::string line;
+    int line_index;
+
+    std::getline(is, line, '\n');   // get the first line of the output which are removed lines
+    std::istringstream removed_lines{line};
+    while (removed_lines >> ch)
+    {
+        removed_lines.putback(ch);
+        removed_lines >> ch >> ch;
+        std::getline(removed_lines, line, '}');
+        removed_lines >> line_index >> ch;
+        changes.removed.push_back({line, line_index});
+    }
+
+    // removes a bug of buffer going push backed into the vector, idk why
+    line = "";
+    line_index = 0;
+
+    std::getline(is, line);
+    std::istringstream inserted_lines{line};
+    while (inserted_lines >> ch)
+    {
+        inserted_lines.putback(ch);
+        inserted_lines >> ch >> ch;
+        std::getline(inserted_lines, line, '}');
+        inserted_lines >> line_index >> ch;
+        changes.inserted.push_back({line, line_index});
+    }
+    return is;
 }

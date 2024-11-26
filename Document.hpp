@@ -52,8 +52,10 @@ namespace Document_Namespace
             DocumentComparison(const Document_Namespace::Document& source, const Document_Namespace::Document& modified);
 
             friend std::ostream& operator<<(std::ostream& os, const DocumentComparison& changes);
+            friend std::istream& operator>>(std::istream& is, DocumentComparison& changes);
 
             bool is_modified() const;
+            void clear() { inserted.clear(); removed.clear(); }
         private:
             std::vector<std::pair<std::string, int>> inserted;    // stores lines that were added at index int
             std::vector<std::pair<std::string, int>> removed; // stores indexes of lines that were removed
@@ -68,4 +70,5 @@ namespace Document_Namespace
     bool contains(const Document_Namespace::Document& doc, const std::string& line);
 
     std::ostream& operator<<(std::ostream& os, const DocumentComparison& changes);
+    std::istream& operator>>(std::istream& is, DocumentComparison& changes);
 }
