@@ -14,13 +14,13 @@ namespace Commit_Namespace
     */
     struct Filechange
     {
-            Document_Namespace::Document source;
-            Document_Namespace::Document modified;
+            std::filesystem::path source;
+            std::filesystem::path modified;
             Document_Namespace::DocumentComparison changes;
 
             Filechange() {  }
             Filechange(const Document_Namespace::Document& doc1, const Document_Namespace::Document& doc2)
-                :source(doc1), modified(doc2)
+                :source(doc1.get_path()), modified(doc2.get_path())
             {
                 changes = Document_Namespace::DocumentComparison{doc1, doc2};
             }
@@ -47,4 +47,5 @@ namespace Commit_Namespace
     };
     std::ostream& operator<<(std::ostream& os, const Commit& c);
     std::ostream& operator<<(std::ostream& os, const Filechange& c);
+    std::istream& operator>>(std::istream& is, Filechange& c);
 }
