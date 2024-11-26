@@ -1,4 +1,3 @@
-#include <string>
 #include "Commit.hpp"
 
 class Repository{
@@ -34,7 +33,7 @@ std::istream& operator>>(std::istream& is, Repository& repo)
     {
         is.putback(ch);
         Commit_Namespace::Commit commit{};
-        is >> commit;
+        //is >> commit;
         repo.add_commit(commit);
     }
     return is;

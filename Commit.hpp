@@ -6,13 +6,10 @@ namespace Commit_Namespace
     /*
     Commit structure:
         {
-        HASH COMMIT_COMMENT 
-        {  
-        SOURCE_FILEPATH
-        MODIFIED_FILEPATH
+        HASH "COMMIT_COMMENT" 
+        { "SOURCE_FILEPATH" "MODIFIED_FILEPATH" }
         { { REMOVED_LINE INDEX } { REMOVED_LINE INDEX } } 
         { { ADDED_LINE INDEX } { ADDED_LINE INDEX } } 
-        }
         }
     */
     struct Filechange
@@ -44,11 +41,10 @@ namespace Commit_Namespace
             };
             commit_state state = unpushed;
 
+            int hash_index;
             std::string commit_message;
-            std::chrono::time_point<std::chrono::system_clock> commit_timepoint;
             std::vector<Filechange> modified_files;
-
-            int hash() const;
     };
     std::ostream& operator<<(std::ostream& os, const Commit& c);
+    std::ostream& operator<<(std::ostream& os, const Filechange& c);
 }

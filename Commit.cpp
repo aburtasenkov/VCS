@@ -3,10 +3,10 @@
 /*--------------------------------Commit Initializers----------------------------------------------------------------------------*/
 
 Commit_Namespace::Commit::Commit()
-    :commit_message("NO_MESSAGE"), commit_timepoint(std::chrono::system_clock::now().time_since_epoch())   {   }
+    :commit_message("NO_MESSAGE")   {   }
 
 Commit_Namespace::Commit::Commit(const std::string& message)
-    :commit_message(message), commit_timepoint(std::chrono::system_clock::now().time_since_epoch())    {   }
+    :commit_message(message)    {   }
 
 /*-----------------------------------------------------------------------------------------------------------------------*/
 
@@ -17,21 +17,22 @@ void Commit_Namespace::Commit::push_back(const Commit_Namespace::Filechange& fc)
 
 /*-------------------------------------------Private member methods----------------------------------------------------------------------------*/
 
-int Commit_Namespace::Commit::hash() const
-{
-    return commit_timepoint.time_since_epoch().count();
-}
-
 std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Commit& c)
 {
-    os << "{ " << c.hash() << " ";
+    os << c.hash_index << " " << c.commit_message << std::endl;
     for (const Filechange& file : c.modified_files)
     {
-        os << "{ ";
-        os << file.source.get_path() << " ";
-        os << file.modified.get_path() << " ";
-        os << file.changes;
-        os << " } ";
+        os << file << std::endl;
     }
-    return os << "}";
+    return os;
+}
+
+std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Filechange& c)
+{
+    os << "{ ";
+    os << c.source.get_path() << " ";
+    os << c.modified.get_path() << " ";
+    os << c.changes;
+    os << " } ";
+    return os;
 }
