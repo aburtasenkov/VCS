@@ -226,13 +226,10 @@ std::istream& Document_Namespace::operator>>(std::istream& is, DocumentCompariso
 
         while(get_changed_line(is, pair))
         {
-            std::cout << pair.first << pair.second << "\n";
             container->push_back(pair);
         }
         container = &changes.inserted;
     }
-
-    std::cout << changes.inserted.size() << "\t" << changes.removed.size() << " inserted removed \n";
 
     return is;
 }

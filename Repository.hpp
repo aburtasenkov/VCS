@@ -34,7 +34,6 @@ std::istream& operator>>(std::istream& is, Repository& repo)
         std::cout << commit;
         repo.commits.push_back(commit);
     }
-    std::cout << "loaded " << repo.commits.size() << " commits\n";
     return is;
 }
 

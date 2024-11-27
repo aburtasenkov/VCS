@@ -50,7 +50,6 @@ std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
     is >> source >> modified >> c.changes;
     c.source = ignore_char(source, '"');
     c.modified = ignore_char(modified, '"');
-    std::cout << c << "\n\n";
     return is;
 }
 
@@ -63,6 +62,5 @@ std::istream& Commit_Namespace::operator>>(std::istream& is, Commit& c)
         std::cout << changes;
         c.push_back(changes);
     }
-    std::cout << c << "?\n";
     return is;
 }
