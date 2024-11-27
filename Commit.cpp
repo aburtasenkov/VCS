@@ -46,21 +46,18 @@ std::string ignore_char(const std::string& str, const char& ignore)
 
 std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 {
-    std::string source, modified;
-    is >> source >> modified >> c.changes;
-    c.source = ignore_char(source, '"');
-    c.modified = ignore_char(modified, '"');
+    is >> c.source >> c.modified >> c.changes;
+    c.source = ignore_char(c.source, '"');
+    c.modified = ignore_char(c.modified, '"');
     return is;
 }
 
 std::istream& Commit_Namespace::operator>>(std::istream& is, Commit& c)
 {
     is >> c.hash_index >> c.commit_message;
-    Filechange changes{};
-    while (is >> changes)
+    for (Filechange fc; is >> fc; fc = Filechange{})
     {
-        std::cout << changes;
-        c.push_back(changes);
+        c.modified_files.push_back(fc);
     }
     return is;
 }

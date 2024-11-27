@@ -165,43 +165,54 @@ std::ostream& Document_Namespace::DocumentComparison::output_removed(std::ostrea
 std::ostream& Document_Namespace::operator<<(std::ostream& os, const Document_Namespace::DocumentComparison& changes)
 {
     changes.output_removed(os);
+    os << '/';
     changes.output_inserted(os);
     return os;
 }
 
-void update_count_if_char(int& count, char ch)
-{
-    if (ch == '{')
-        ++count;
-    else if (ch == '}')
-        --count;
-}
-
-bool changes_is_empty(std::istream& is)
+bool next_char_is(std::istream& is, const char prediction)
+// return true if next char in stream is prediction
 {
     char ch = is.peek();
-    if (ch == '}')
-        return true;
-    return false;
+    return (ch == prediction);
 }
 
-bool get_changed_line(std::istream& is, std::pair<std::string, int>& pair)
+bool is_curly_bracket(char ch)
+
 {
-    if (changes_is_empty(is))
+    return (ch == '{' || ch == '}');
+}
+
+bool input_until_char(std::istream& is, std::string& input_string, const char delim)
+// concantenate input_string until delim character is reached
+// return true if delim was reached otherwise false
+{
+    char ch;
+    while(is >> ch)
+    {
+        if (ch == delim)
+        {
+            is.putback(ch);
+            break;
+        }
+        input_string += ch;
+    }
+    return true;
+}
+
+bool get_line_changes(std::istream& is, std::pair<std::string, int>& pair)
+{
+    // if next char is a closing bracket -> no modified lines
+    if (next_char_is(is, '}') || next_char_is(is, '/'))
         return false;
 
-    char delim1, delim2, delim3, delim4;    // all delims need to be curly brackets
-    std::string line;
-    int index;
-    is >> delim1 >> delim2 >> delim4;
-    std::getline(is, line, '}');
-    is >> index >> delim3;
+    char delim1, delim2, delim3, delim4;
+    is >> delim1 >> delim2;
+    input_until_char(is, pair.first, '}');
+    is >> delim3 >> pair.second >> delim4;
 
-    if (!(delim1 == '{' && delim2 == '{' && delim3 == '}'))
+    if (!(is_curly_bracket(delim1) && is_curly_bracket(delim2) && is_curly_bracket(delim3) && is_curly_bracket(delim4)))
         return false;
-    
-    pair.first = line;
-    pair.second = index;
 
     return true;
 }
@@ -209,25 +220,13 @@ bool get_changed_line(std::istream& is, std::pair<std::string, int>& pair)
 std::istream& Document_Namespace::operator>>(std::istream& is, DocumentComparison& changes)
 {
     std::vector<std::pair<std::string, int>>* container = &changes.removed;
-    std::pair<std::string, int> pair;
     for (int i = 0; i < 2; ++i) // do for 2 containers
     {
         char ch;
-        is.get(ch);
-        if (ch == '{')
-        {
-            if (changes_is_empty(is))
-            {
-                is.get();   // skip second the closing } is no changes
-                container = &changes.inserted;
-                continue;
-            }
-        }
-
-        while(get_changed_line(is, pair))
-        {
+        is >> ch;
+        for (std::pair<std::string, int> pair; get_line_changes(is, pair); pair = std::pair<std::string, int>{})
             container->push_back(pair);
-        }
+        is >> ch;
         container = &changes.inserted;
     }
 

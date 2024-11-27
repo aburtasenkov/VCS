@@ -27,11 +27,12 @@ void Repository::add_commit(const Commit_Namespace::Commit& com)
 std::istream& operator>>(std::istream& is, Repository& repo)
 // Input data into Repository
 {
-    is >> repo.name;
-    Commit_Namespace::Commit commit{};
-    while (is >> commit)
+    std::getline(is, repo.name);
+    std::string commit_line;
+    for (Commit_Namespace::Commit commit; std::getline(is, commit_line); commit = Commit_Namespace::Commit{})
     {
-        std::cout << commit;
+        std::istringstream iss{commit_line};
+        iss >> commit;
         repo.commits.push_back(commit);
     }
     return is;
@@ -40,10 +41,10 @@ std::istream& operator>>(std::istream& is, Repository& repo)
 std::ostream& operator<<(std::ostream& os, const Repository& repo)
 // output Repository data
 {
-    os << repo.name << ' ';
+    os << repo.name << '\n';
     for (auto& commit : repo.commits)
     {
-        os << commit << ' ';
+        os << commit << '\n';
     }
     return os;
 }
