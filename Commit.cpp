@@ -19,41 +19,50 @@ void Commit_Namespace::Commit::push_back(const Commit_Namespace::Filechange& fc)
 
 std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Commit& c)
 {
-    os << c.hash_index << " " << c.commit_message << std::endl;
+    os << c.hash_index << " " << c.commit_message << ' ';
     for (const Filechange& file : c.modified_files)
     {
-        os << file << std::endl;
+        os << file << ' ';
     }
     return os;
 }
 
 std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Filechange& c)
 {
-    os << c.source << " " << c.modified << "\n";
-    os << c.changes;
+    os << c.source << " " << c.modified << ' ' << c.changes;
     return os;
+}
+
+std::string ignore_char(const std::string& str, const char& ignore)
+{
+    std::string output;
+    for (const char& ch : str)
+    {
+        if (ch != ignore)
+            output += ch;
+    }
+    return output;
 }
 
 std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 {
-    std::string line;
-    is >> c.source >> c.modified;
-    std::getline(is, line, '\n');
-    is >> c.changes;
+    std::string source, modified;
+    is >> source >> modified >> c.changes;
+    c.source = ignore_char(source, '"');
+    c.modified = ignore_char(modified, '"');
+    std::cout << c << "\n\n";
     return is;
 }
 
 std::istream& Commit_Namespace::operator>>(std::istream& is, Commit& c)
 {
-    c.modified_files.clear();
-    char ch;
     is >> c.hash_index >> c.commit_message;
-    while (is >> ch)
+    Filechange changes{};
+    while (is >> changes)
     {
-        is.putback(ch);
-        Filechange changes;
-        is >> changes;
+        std::cout << changes;
         c.push_back(changes);
     }
+    std::cout << c << "?\n";
     return is;
 }

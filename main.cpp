@@ -6,8 +6,8 @@ const std::filesystem::path CURRENT_PATH{std::filesystem::current_path()};
 
 // filepath in relation to CURRENT_PATH
 const std::filesystem::path VCS_PATH{"VCS/"}; 
-const std::filesystem::path VCS_COMMITED_STATE{"commited state/"};
-const std::filesystem::path VCS_STAGED_STATE{"staged state/"};
+const std::filesystem::path VCS_COMMITED_STATE{"commited_state/"};
+const std::filesystem::path VCS_STAGED_STATE{"staged_state/"};
 const std::filesystem::path VCS_IGNORE{"ignore"};
 const std::filesystem::path VCS_CACHE{"cache"};
 

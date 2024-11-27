@@ -142,61 +142,97 @@ bool Document_Namespace::contains(const Document_Namespace::Document& doc, const
 
 std::ostream& Document_Namespace::DocumentComparison::output_inserted(std::ostream& os) const
 {
+    os << '{';
     for (const auto& pair : inserted)
     {
         os << "{{" << pair.first << "}" << pair.second << "}";
     }
+    os << '}';
     return os;
 }
 
 std::ostream& Document_Namespace::DocumentComparison::output_removed(std::ostream& os) const
 {
+    os << '{';
     for (const auto& pair : removed)
     {
         os << "{{" << pair.first << "}" << pair.second << "}";
     }
+    os << '}';
     return os;
 }
 
 std::ostream& Document_Namespace::operator<<(std::ostream& os, const Document_Namespace::DocumentComparison& changes)
 {
     changes.output_removed(os);
-    os << "\n";
     changes.output_inserted(os);
     return os;
 }
 
+void update_count_if_char(int& count, char ch)
+{
+    if (ch == '{')
+        ++count;
+    else if (ch == '}')
+        --count;
+}
+
+bool changes_is_empty(std::istream& is)
+{
+    char ch = is.peek();
+    if (ch == '}')
+        return true;
+    return false;
+}
+
+bool get_changed_line(std::istream& is, std::pair<std::string, int>& pair)
+{
+    if (changes_is_empty(is))
+        return false;
+
+    char delim1, delim2, delim3, delim4;    // all delims need to be curly brackets
+    std::string line;
+    int index;
+    is >> delim1 >> delim2 >> delim4;
+    std::getline(is, line, '}');
+    is >> index >> delim3;
+
+    if (!(delim1 == '{' && delim2 == '{' && delim3 == '}'))
+        return false;
+    
+    pair.first = line;
+    pair.second = index;
+
+    return true;
+}
+
 std::istream& Document_Namespace::operator>>(std::istream& is, DocumentComparison& changes)
 {
-    changes.clear();    // clear because vectors arent changed, only modified
-    char ch;
-    std::string line;
-    int line_index;
-
-    std::getline(is, line);
-    std::istringstream removed_lines{line};
-    while (removed_lines >> ch)
+    std::vector<std::pair<std::string, int>>* container = &changes.removed;
+    std::pair<std::string, int> pair;
+    for (int i = 0; i < 2; ++i) // do for 2 containers
     {
-        removed_lines.putback(ch);
-        removed_lines >> ch >> ch;
-        std::getline(removed_lines, line, '}');
-        removed_lines >> line_index >> ch;
-        changes.removed.push_back({line, line_index});
+        char ch;
+        is.get(ch);
+        if (ch == '{')
+        {
+            if (changes_is_empty(is))
+            {
+                is.get();   // skip second the closing } is no changes
+                container = &changes.inserted;
+                continue;
+            }
+        }
+
+        while(get_changed_line(is, pair))
+        {
+            std::cout << pair.first << pair.second << "\n";
+            container->push_back(pair);
+        }
+        container = &changes.inserted;
     }
 
-    // removes a bug of buffer going push backed into the vector, idk why
-    line = "";
-    line_index = 0;
+    std::cout << changes.inserted.size() << "\t" << changes.removed.size() << " inserted removed \n";
 
-    std::getline(is, line);
-    std::istringstream inserted_lines{line};
-    while (inserted_lines >> ch)
-    {
-        inserted_lines.putback(ch);
-        inserted_lines >> ch >> ch;
-        std::getline(inserted_lines, line, '}');
-        inserted_lines >> line_index >> ch;
-        changes.inserted.push_back({line, line_index});
-    }
     return is;
 }

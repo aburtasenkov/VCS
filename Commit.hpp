@@ -24,6 +24,8 @@ namespace Commit_Namespace
             {
                 changes = Document_Namespace::DocumentComparison{doc1, doc2};
             }
+
+            friend std::istream& operator>>(std::istream& is, Filechange& c);
     };
 
     class Commit{

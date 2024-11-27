@@ -28,24 +28,23 @@ std::istream& operator>>(std::istream& is, Repository& repo)
 // Input data into Repository
 {
     is >> repo.name;
-    char ch;
-    while (is >> ch)
+    Commit_Namespace::Commit commit{};
+    while (is >> commit)
     {
-        is.putback(ch);
-        Commit_Namespace::Commit commit{};
-        //is >> commit;
-        repo.add_commit(commit);
+        std::cout << commit;
+        repo.commits.push_back(commit);
     }
+    std::cout << "loaded " << repo.commits.size() << " commits\n";
     return is;
 }
 
 std::ostream& operator<<(std::ostream& os, const Repository& repo)
 // output Repository data
 {
-    os << repo.name << "\n";;
+    os << repo.name << ' ';
     for (auto& commit : repo.commits)
     {
-        os << commit << "\n";
+        os << commit << ' ';
     }
     return os;
 }
