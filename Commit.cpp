@@ -33,22 +33,9 @@ std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Filechange& c
     return os;
 }
 
-std::string ignore_char(const std::string& str, const char& ignore)
-{
-    std::string output;
-    for (const char& ch : str)
-    {
-        if (ch != ignore)
-            output += ch;
-    }
-    return output;
-}
-
 std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 {
     is >> c.source >> c.modified >> c.changes;
-    c.source = ignore_char(c.source, '"');
-    c.modified = ignore_char(c.modified, '"');
     return is;
 }
 
