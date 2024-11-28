@@ -109,6 +109,8 @@ void remove_file_from_directory(const std::filesystem::path path)
 void commit(Repository* repo, const std::string& commit_message)
 // make a commit to Repository object with commit_message
 {
+    if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
+        throw Exception{"Missing File Error: Repository uninitialized", CURRENT_FILENAME};
     Commit_Namespace::Commit commit{commit_message};
     std::filesystem::path filename;
 
@@ -131,14 +133,13 @@ void commit(Repository* repo, const std::string& commit_message)
                                         };
 
         commit.push_back(fc);
+
+        remove_file_from_directory(CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE/filename);
+        copy_file_to_directory(CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE/filename, CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE);
     }
     repo->add_commit(commit);
 
-    if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
-        throw Exception{"Missing File Error: Repository uninitialized", CURRENT_FILENAME};
     save_cache(repo);
-    remove_file_from_directory(CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE/filename);
-    copy_file_to_directory(CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE/filename, CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE);
 
     // clear staged state for future commits
     remove_files_from_directory(CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE);
