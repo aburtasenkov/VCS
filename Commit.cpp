@@ -23,6 +23,7 @@ std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Commit& c)
     for (int index = 0; index < c.modified_files.size(); ++index)
     {
         os << c.modified_files[index];
+        // if not last add whitespace
         if (index < c.modified_files.size() - 1)
             os << ' ';
     }
@@ -38,16 +39,19 @@ std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Filechange& c
 std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 {
     is >> c.source >> c.modified >> c.changes;
+    c.source = ignore_char(c.source, '"');
     return is;
 }
 
 std::istream& Commit_Namespace::operator>>(std::istream& is, Commit& c)
 {
     is >> c.hash_index >> c.commit_message;
-    std::string filechanges_line;
-    for (Filechange fc; std::getline(is, filechanges_line); fc = Filechange{})
+    std::string filechanges;
+    std::getline(is, filechanges);
+    std::istringstream iss{filechanges};
+    while (iss.good())
     {
-        std::istringstream iss{filechanges_line};
+        Filechange fc;
         iss >> fc;
         c.push_back(fc);
     }

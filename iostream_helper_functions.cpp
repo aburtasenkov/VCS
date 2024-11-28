@@ -30,6 +30,8 @@ bool input_until_char(std::istream& is, std::string& input_string, const char de
 }
 
 bool input_until_pair(std::istream& is, std::string& input_string, const std::pair<char, char> seq)
+// concantenate input_string until sequence of 2 chars is reached
+// return true if seq was reached otherwise false
 {
     char ch;
     while(is >> ch)
@@ -42,4 +44,22 @@ bool input_until_pair(std::istream& is, std::string& input_string, const std::pa
         input_string += ch;
     }
     return true;
+}
+
+bool contains_data(std::istream& is)
+// return true if is has any left data
+{
+    std::cout << is.peek();
+    return is.peek();
+}
+
+std::string ignore_char(const std::string& str, char to_be_ignored)
+{
+    std::string char_free;
+    for (char ch : str)
+    {
+        if (ch != to_be_ignored)
+            char_free += ch;
+    }
+    return char_free;
 }
