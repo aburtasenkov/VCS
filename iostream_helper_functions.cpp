@@ -28,3 +28,18 @@ bool input_until_char(std::istream& is, std::string& input_string, const char de
     }
     return true;
 }
+
+bool input_until_pair(std::istream& is, std::string& input_string, const std::pair<char, char> seq)
+{
+    char ch;
+    while(is >> ch)
+    {
+        if (ch == seq.first && is.peek() == seq.second)
+        {
+            is.putback(ch);
+            break;
+        }
+        input_string += ch;
+    }
+    return true;
+}
