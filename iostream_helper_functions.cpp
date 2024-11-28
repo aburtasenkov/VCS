@@ -17,7 +17,7 @@ bool input_until_char(std::istream& is, std::string& input_string, const char de
 // return true if delim was reached otherwise false
 {
     char ch;
-    while(is >> ch)
+    while(is.get(ch))
     {
         if (ch == delim)
         {
@@ -34,7 +34,7 @@ bool input_until_pair(std::istream& is, std::string& input_string, const std::pa
 // return true if seq was reached otherwise false
 {
     char ch;
-    while(is >> ch)
+    while(is.get(ch))
     {
         if (ch == seq.first && is.peek() == seq.second)
         {
