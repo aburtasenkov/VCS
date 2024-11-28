@@ -29,9 +29,10 @@ std::istream& operator>>(std::istream& is, Repository& repo)
 {
     std::getline(is, repo.name);
     std::string commit_line;
-    for (Commit_Namespace::Commit commit; std::getline(is, commit_line); commit = Commit_Namespace::Commit{})
+    while (std::getline(is, commit_line))
     {
         std::istringstream iss{commit_line};
+        Commit_Namespace::Commit commit{};
         iss >> commit;
         repo.commits.push_back(commit);
     }

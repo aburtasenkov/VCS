@@ -194,7 +194,8 @@ std::istream& Document_Namespace::operator>>(std::istream& is, DocumentCompariso
     {
         char ch;
         is >> ch;
-        for (std::pair<std::string, int> pair; get_line_changes(is, pair); pair = std::pair<std::string, int>{})
+        std::pair<std::string, int> pair;
+        while (get_line_changes(is, pair))
             container->push_back(pair);
         is >> ch >> ch;
         container = &changes.inserted;

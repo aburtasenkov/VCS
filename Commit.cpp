@@ -39,20 +39,17 @@ std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Filechange& c
 std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 {
     is >> c.source >> c.modified >> c.changes;
-    c.source = ignore_char(c.source, '"');
+    c.source = ignore_char(c.source, '"');  //solves obscure bug of any other Filechange other than first having \" at the end of c.source 
     return is;
 }
 
 std::istream& Commit_Namespace::operator>>(std::istream& is, Commit& c)
 {
     is >> c.hash_index >> c.commit_message;
-    std::string filechanges;
-    std::getline(is, filechanges);
-    std::istringstream iss{filechanges};
-    while (iss.good())
+    while (is.good())
     {
         Filechange fc;
-        iss >> fc;
+        is >> fc;
         c.push_back(fc);
     }
     return is;
