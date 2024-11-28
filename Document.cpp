@@ -226,7 +226,7 @@ std::istream& Document_Namespace::operator>>(std::istream& is, DocumentCompariso
         is >> ch;
         for (std::pair<std::string, int> pair; get_line_changes(is, pair); pair = std::pair<std::string, int>{})
             container->push_back(pair);
-        is >> ch;
+        is >> ch >> ch;
         container = &changes.inserted;
     }
 
