@@ -29,7 +29,7 @@ std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Commit& c)
 
 std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Filechange& c)
 {
-    os << c.source << " " << c.modified << ' ' << c.changes;
+    os << c.source << ' ' << c.modified << ' ' << c.changes;
     return os;
 }
 
@@ -42,9 +42,12 @@ std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 std::istream& Commit_Namespace::operator>>(std::istream& is, Commit& c)
 {
     is >> c.hash_index >> c.commit_message;
-    for (Filechange fc; is >> fc; fc = Filechange{})
+    std::string filechanges_line;
+    for (Filechange fc; std::getline(is, filechanges_line); fc = Filechange{})
     {
-        c.modified_files.push_back(fc);
+        std::istringstream iss{filechanges_line};
+        iss >> fc;
+        c.push_back(fc);
     }
     return is;
 }
