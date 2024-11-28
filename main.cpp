@@ -96,14 +96,21 @@ void remove_files_from_directory(const std::filesystem::path dir)
     for (auto iterator : std::filesystem::directory_iterator{dir})
     {    
         if(!std::filesystem::remove(iterator.path()))
-            throw Exception{"Delete Error: could not remove all files from directory" / dir, CURRENT_FILENAME};
+            throw Exception{"Delete Error: could not remove all files from directory " / dir, CURRENT_FILENAME};
     }
+}
+
+void remove_file_from_directory(const std::filesystem::path path)
+{  
+    if(!std::filesystem::remove(path))
+        throw Exception{"Delete Error: could not remove file from directory " / path, CURRENT_FILENAME};
 }
 
 void commit(Repository* repo, const std::string& commit_message)
 // make a commit to Repository object with commit_message
 {
     Commit_Namespace::Commit commit{commit_message};
+    std::filesystem::path filename;
 
     // iterate through each file in staged state
     for (auto& filepath_iterator : std::filesystem::directory_iterator{CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE})
@@ -115,12 +122,12 @@ void commit(Repository* repo, const std::string& commit_message)
             copy_file_to_directory(filepath_iterator.path(), CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE);
         }
 
-        std::filesystem::path filename{filepath_iterator.path().filename()};
+        filename = filepath_iterator.path().filename();
 
         // commited state as source, staged state as modified
         Commit_Namespace::Filechange fc{
                                         Document_Namespace::Document{CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE/filename},
-                                        Document_Namespace::Document{filepath_iterator.path()}
+                                        Document_Namespace::Document{CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE/filename}
                                         };
 
         commit.push_back(fc);
@@ -130,6 +137,8 @@ void commit(Repository* repo, const std::string& commit_message)
     if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
         throw Exception{"Missing File Error: Repository uninitialized", CURRENT_FILENAME};
     save_cache(repo);
+    remove_file_from_directory(CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE/filename);
+    copy_file_to_directory(CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE/filename, CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE);
 
     // clear staged state for future commits
     remove_files_from_directory(CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE);
