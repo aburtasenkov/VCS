@@ -1,12 +1,9 @@
 #include <list>
 #include <filesystem>
-#include <fstream>
 #include <vector>
 #include <stdexcept>
-#include <string>
-#include <iostream>
-#include <sstream>
 #include <algorithm>
+#include "iostream_helper_functions.hpp"
 
 namespace Document_Namespace
 {
