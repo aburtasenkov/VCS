@@ -15,10 +15,11 @@ const std::filesystem::path VCS_CACHE{"cache"};
 const std::string INIT = "init";
 const std::string ADD = "add";
 const std::string COMMIT = "commit";
+const std::string RESTORE = "restore";
 
 // magic constants
 const int INPUT_COMMAND_INDEX = 1;
-const int MIN_INPUT_ARGUMENTS = 2;
+const int MIN_INPUT_ARGUMENTS = 3;
 const std::string CURRENT_FILENAME = "main.cpp";
 
 void copy_file_to_directory(const std::filesystem::path& source, const std::filesystem::path& copy_directory)
@@ -145,12 +146,24 @@ void commit(Repository* repo, const std::string& commit_message)
     remove_files_from_directory(CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE);
 }
 
+void restore(std::filesystem::path filename)
+// Discard all changes that were made after the last commit
+// filename is path relative to CURRENT_PATH
+{
+    if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE))
+        throw Exception{"Missing File Error: cannot restore file that was never commited", CURRENT_FILENAME};
+
+    remove_file_from_directory(CURRENT_PATH/filename);
+    copy_file_to_directory(CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE/filename, CURRENT_PATH);
+}
+
 int main(int argc, char** argv)
 try
 {    
     // argv should at least contain a string after executable name
     if (argc < MIN_INPUT_ARGUMENTS)
         throw Exception{"Syntax-Error: Bad Command Line Input", CURRENT_FILENAME};
+    std::cout << argc << "\n";
 
     std::string INPUT_CURRENT_COMMAND = argv[INPUT_COMMAND_INDEX];
 
@@ -162,8 +175,10 @@ try
 
         if (INPUT_CURRENT_COMMAND == ADD)
             add(argv[INPUT_COMMAND_INDEX + 1]);
-        if (INPUT_CURRENT_COMMAND == COMMIT)
+        else if (INPUT_CURRENT_COMMAND == COMMIT)
             commit(repo, argv[INPUT_COMMAND_INDEX + 1]);
+        else if (INPUT_CURRENT_COMMAND == RESTORE)
+            restore(argv[INPUT_COMMAND_INDEX + 1]); 
 
         delete repo;
     }
