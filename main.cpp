@@ -67,7 +67,7 @@ void initialize(const std::string& repository_name)
 
     // cache for repository data
     if (std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
-        throw Exception{"Invalid Initialization: Repository already initialized", CURRENT_FILENAME};
+        throw Exception{"Invalid Initialization: Repository already initialized"};
     Repository repo{repository_name};
     save_cache(&repo);
 
