@@ -64,12 +64,15 @@ std::string ignore_char(const std::string& str, char to_be_ignored)
 }
 
 void get_indexed_line(std::istream& is, std::string& str, int index)
+// read line located at index into str
 {
+    ++index;    // if index = 0 -> index = 1 so 1 while loop is executed
     while(index--)
         std::getline(is, str);
 }
 
 void get_last_line(std::istream& is, std::string& str)
+// read last line of is into str
 {
     while(std::getline(is, str));
 }
