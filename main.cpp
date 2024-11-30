@@ -10,6 +10,7 @@ const std::filesystem::path VCS_COMMITED_STATE{"commited_state/"};
 const std::filesystem::path VCS_STAGED_STATE{"staged_state/"};
 const std::filesystem::path VCS_IGNORE{"ignore"};
 const std::filesystem::path VCS_CACHE{"cache"};
+const std::filesystem::path VCS_COMMIT_DATA{"commit_data"};
 
 // VCS input commands
 const std::string INIT = "init";
@@ -70,8 +71,11 @@ void initialize(const std::string& repository_name)
     Repository repo{repository_name};
     save_cache(&repo);
 
-    std::ofstream ofs {CURRENT_PATH/VCS_PATH/VCS_IGNORE}; // Create VCS ignore file
-    ofs.close();
+    // create commit_data file
+    std::ofstream vcs_commit_data{CURRENT_PATH/VCS_PATH/VCS_COMMIT_DATA};
+    std::ofstream vcs_ignore {CURRENT_PATH/VCS_PATH/VCS_IGNORE};
+    vcs_ignore.close();
+    vcs_commit_data.close();
 }
 
 void add(const std::filesystem::path& source_path)
@@ -163,7 +167,6 @@ try
     // argv should at least contain a string after executable name
     if (argc < MIN_INPUT_ARGUMENTS)
         throw Exception{"Syntax-Error: Bad Command Line Input", CURRENT_FILENAME};
-    std::cout << argc << "\n";
 
     std::string INPUT_CURRENT_COMMAND = argv[INPUT_COMMAND_INDEX];
 
