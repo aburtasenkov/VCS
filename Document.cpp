@@ -172,6 +172,7 @@ std::ostream& Document_Namespace::operator<<(std::ostream& os, const Document_Na
 
 bool get_line_changes(std::istream& is, std::pair<std::string, int>& pair)
 {
+    pair.first = std::string{};
     // if next char is a closing bracket -> no modified lines
     if (next_char_is(is, '}') || next_char_is(is, '/'))
         return false;
