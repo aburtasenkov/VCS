@@ -10,3 +10,5 @@ bool input_until_char(std::istream& is, std::string& input_string, const char de
 bool input_until_pair(std::istream& is, std::string& input_string, const std::pair<char, char> seq);
 bool contains_data(std::istream& is);
 std::string ignore_char(const std::string& str, char to_be_ignored);
+void get_indexed_line(std::istream& is, std::string& str, int index);
+void get_last_line(std::istream& is, std::string& str);

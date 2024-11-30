@@ -63,6 +63,12 @@ std::string ignore_char(const std::string& str, char to_be_ignored)
     return char_free;
 }
 
+void get_indexed_line(std::istream& is, std::string& str, int index)
+{
+    while(index--)
+        std::getline(is, str);
+}
+
 void get_last_line(std::istream& is, std::string& str)
 {
     while(std::getline(is, str));
