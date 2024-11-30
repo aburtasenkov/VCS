@@ -19,7 +19,7 @@ void Commit_Namespace::Commit::push_back(const Commit_Namespace::Filechange& fc)
 
 std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Commit& c)
 {
-    os << c.hash_index << " " << c.commit_message << ' ';
+    os << c.commit_index << " " << c.commit_message << ' ';
     for (int index = 0; index < c.modified_files.size(); ++index)
     {
         os << c.modified_files[index];
@@ -45,7 +45,7 @@ std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 
 std::istream& Commit_Namespace::operator>>(std::istream& is, Commit& c)
 {
-    is >> c.hash_index >> c.commit_message;
+    is >> c.commit_index >> c.commit_message;
     while (is.good())
     {
         Filechange fc;
