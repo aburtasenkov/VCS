@@ -3,15 +3,11 @@
 
 namespace Commit_Namespace
 {
-    /*
-    Commit structure:
-        {
-        HASH "COMMIT_COMMENT" 
-        { "SOURCE_FILEPATH" "MODIFIED_FILEPATH" }
-        { { REMOVED_LINE INDEX } { REMOVED_LINE INDEX } } 
-        { { ADDED_LINE INDEX } { ADDED_LINE INDEX } } 
-        }
-    */
+/*
+Commit structure:
+COMMIT_INDEX COMMIT_MESSAGE COMMITED_STATE_PATH STAGED_STATE_PATH {}/{} COMMITED_STATE_PATH STAGED_STATE_PATH {}/{}
+COMMIT_INDEX COMMIT_MESSAGE COMMITED_STATE_PATH STAGED_STATE_PATH {{{REMOVED_LINE}REMOVED_LINE_INDEX}}/{} COMMITED_STATE_PATH STAGED_STATE_PATH {{{INSERTED_LINE}INSERTED_LINE_INDEX}}/{}
+*/
     struct Filechange
     {
             std::filesystem::path source;
@@ -44,7 +40,7 @@ namespace Commit_Namespace
             };
             commit_state state = unpushed;
 
-            int hash_index;
+            int commit_index;
             std::string commit_message;
             std::vector<Filechange> modified_files;
     };
