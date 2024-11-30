@@ -49,7 +49,6 @@ bool input_until_pair(std::istream& is, std::string& input_string, const std::pa
 bool contains_data(std::istream& is)
 // return true if is has any left data
 {
-    std::cout << is.peek();
     return is.peek();
 }
 
