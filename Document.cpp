@@ -32,10 +32,9 @@ Document_Namespace::Document::Document()
 Document_Namespace::Document::Document(const std::filesystem::path& path_to_input_file)
     :filepath(path_to_input_file)
 {
-    std::string input = static_cast<std::string>(filepath);
-    std::ifstream ifs{input};
+    std::ifstream ifs{filepath};
 
-    std::string line;
+    Document_Namespace::Document::value_type line;
     while (std::getline(ifs, line))
     {
         lines.push_back(line);
@@ -44,7 +43,7 @@ Document_Namespace::Document::Document(const std::filesystem::path& path_to_inpu
 
 /*------------------------------------Indexing---------------------------------------------------------*/
 
-std::string& Document_Namespace::Document::operator[](int index)
+Document_Namespace::Document::value_type& Document_Namespace::Document::operator[](int index)
 // range checked indexing
 // non const indexing
 {
@@ -52,7 +51,7 @@ std::string& Document_Namespace::Document::operator[](int index)
     return lines[index];
 }
 
-const std::string& Document_Namespace::Document::operator[](int index) const
+const Document_Namespace::Document::value_type& Document_Namespace::Document::operator[](int index) const
 // range checked indexing
 // const indexing
 {
@@ -128,7 +127,7 @@ void Document_Namespace::DocumentComparison::push_back_removed(const Document_Na
 
 /*---------------------------------------------------------------------------------------------*/
 
-bool Document_Namespace::contains(const Document_Namespace::Document& doc, const std::string& line)
+bool Document_Namespace::contains(const Document_Namespace::Document& doc, const Document_Namespace::Document::value_type& line)
 {
     for (const auto& l : doc)
     {
@@ -170,9 +169,9 @@ std::ostream& Document_Namespace::operator<<(std::ostream& os, const Document_Na
     return os;
 }
 
-bool get_line_changes(std::istream& is, std::pair<std::string, int>& pair)
+bool get_line_changes(std::istream& is, Document_Namespace::DocumentComparison::value_type& pair)
 {
-    pair.first = std::string{};
+    pair.first = Document_Namespace::Document::value_type{};
     // if next char is a closing bracket -> no modified lines
     if (next_char_is(is, '}') || next_char_is(is, '/'))
         return false;
@@ -190,12 +189,12 @@ bool get_line_changes(std::istream& is, std::pair<std::string, int>& pair)
 
 std::istream& Document_Namespace::operator>>(std::istream& is, DocumentComparison& changes)
 {
-    std::vector<std::pair<std::string, int>>* container = &changes.removed;
+    std::vector<Document_Namespace::DocumentComparison::value_type>* container = &changes.removed;
     for (int i = 0; i < 2; ++i) // do for 2 containers
     {
         char ch;
         is >> ch;
-        std::pair<std::string, int> pair;
+        Document_Namespace::DocumentComparison::value_type pair;
         while (get_line_changes(is, pair))
             container->push_back(pair);
         is >> ch >> ch;
@@ -203,4 +202,32 @@ std::istream& Document_Namespace::operator>>(std::istream& is, DocumentCompariso
     }
 
     return is;
+}
+
+Document_Namespace::Document Document_Namespace::operator+(Document_Namespace::Document doc, Document_Namespace::DocumentComparison& changes)
+// Returns a Document_Namespace::Document object that contains changes.inserted in their right spots
+{
+    std::vector<Document_Namespace::DocumentComparison::value_type>& container = changes.data(Document_Namespace::Linetype::inserted);
+    for (auto& [line, index] : container)
+        doc.insert(doc.begin() + index, line);
+    return doc;
+}
+
+Document_Namespace::Document Document_Namespace::operator-(Document_Namespace::Document doc, Document_Namespace::DocumentComparison& changes)
+// Returns a Document_Namespace::Document object without lines in changes.removed
+{
+    std::vector<Document_Namespace::DocumentComparison::value_type>& container = changes.data(Document_Namespace::Linetype::removed);
+    for (auto& [line, index] : container)
+        doc.erase(doc.begin() + index);
+    return doc;
+}
+
+std::vector<Document_Namespace::DocumentComparison::value_type>& Document_Namespace::DocumentComparison::data(Document_Namespace::Linetype lt)
+// return reference to container containing lt information
+{
+    if (lt == Document_Namespace::Linetype::inserted)
+        return inserted;
+    if (lt == Document_Namespace::Linetype::removed)
+        return removed;
+    throw std::runtime_error("DocumentComparison::data - bad input");
 }
