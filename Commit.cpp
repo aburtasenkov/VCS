@@ -24,7 +24,8 @@ Commit_Namespace::Commit::Commit(const std::string& message)
 
 void Commit_Namespace::Commit::push_back(const Commit_Namespace::Filechange& fc)
 {
-    modified_files.push_back(fc);
+    if (fc.changes.is_modified())
+        modified_files.push_back(fc);
 }
 
 /*-------------------------------------------Private member methods----------------------------------------------------------------------------*/
@@ -83,4 +84,9 @@ std::istream& Commit_Namespace::operator>>(std::istream& is, std::tm& timepoint)
 std::ostream& Commit_Namespace::operator<<(std::ostream& os, const std::tm& timepoint)
 {
     return os << std::put_time(&timepoint, "%d.%m.%Y %H:%M:%S");
+}
+
+bool Commit_Namespace::Commit::contains_changes()
+{
+    return !modified_files.empty();
 }
