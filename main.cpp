@@ -188,9 +188,7 @@ try
         {
             if (INPUT_CURRENT_COMMAND == LOG)
                 log(repo);
-
         }
-        else throw Exception{"Syntax-Error: Bad Command Line input", CURRENT_FILENAME};
 
         // for command line input containing command and extra word
         if (INPUT_CURRENT_COMMAND == ADD)
