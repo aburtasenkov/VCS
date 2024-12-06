@@ -76,3 +76,16 @@ void get_last_line(std::istream& is, std::string& str)
 {
     while(std::getline(is, str));
 }
+
+std::string ignore_first_n_chars(const std::string& str, int count)
+{
+    std::string char_free;
+    for (char ch : str)
+    {
+        if (!count)
+            char_free += ch;
+        else
+            --count;
+    }
+    return char_free;
+}

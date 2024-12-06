@@ -12,3 +12,4 @@ bool contains_data(std::istream& is);
 std::string ignore_char(const std::string& str, char to_be_ignored);
 void get_indexed_line(std::istream& is, std::string& str, int index);
 void get_last_line(std::istream& is, std::string& str);
+std::string ignore_first_n_chars(const std::string& str, int count);
