@@ -52,7 +52,6 @@ std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 {
     is >> c.filename >> c.changes;
     c.filename = ignore_char(c.filename, '"');  //solves obscure bug of any other Filechange other than first having \" at the end of c.source 
-    c.filename = ignore_first_n_chars(c.filename, VCS_CHANGED_STATE_CHAR_COUNT);
     return is;
 }
 

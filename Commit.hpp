@@ -17,7 +17,7 @@ COMMIT_TIMEPOINt COMMIT_MESSAGE COMMITED_STATE_PATH STAGED_STATE_PATH {{{REMOVED
 
             Filechange() {  }
             Filechange(const Document_Namespace::Document& doc1, const Document_Namespace::Document& doc2)
-                :filename(doc2.get_path())
+                :filename(ignore_first_n_chars(doc2.get_path(), VCS_CHANGED_STATE_CHAR_COUNT))
             {
                 changes = Document_Namespace::DocumentComparison{doc1, doc2};
             }
