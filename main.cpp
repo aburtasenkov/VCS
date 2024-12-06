@@ -37,10 +37,10 @@ Repository* read_cache()
 // load data into Repository object
 // return object containing loaded data
 {
-    if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
+    if (!std::filesystem::exists(VCS_PATH/VCS_CACHE))
         throw Exception{"Missing File Error: Repository uninitialized", CURRENT_FILENAME};
 
-    std::ifstream ifs{CURRENT_PATH/VCS_PATH/VCS_CACHE};
+    std::ifstream ifs{VCS_PATH/VCS_CACHE};
 
     Repository* repo = new Repository{};
 
@@ -54,7 +54,7 @@ Repository* read_cache()
 void save_cache(Repository* repo)
 // save data from Repository object
 {
-    std::ofstream ofs{CURRENT_PATH/VCS_PATH/VCS_CACHE};
+    std::ofstream ofs{VCS_PATH/VCS_CACHE};
     ofs << (*repo);
     ofs.close();
 }
@@ -63,19 +63,19 @@ void initialize(const std::string& repository_name)
 // initialize a VCS system
 {
     // Create VCS directories
-    std::filesystem::create_directory(CURRENT_PATH/VCS_PATH);
-    std::filesystem::create_directory(CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE);
-    std::filesystem::create_directory(CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE);
+    std::filesystem::create_directory(VCS_PATH);
+    std::filesystem::create_directory(VCS_PATH/VCS_COMMITED_STATE);
+    std::filesystem::create_directory(VCS_PATH/VCS_STAGED_STATE);
 
     // cache for repository data
-    if (std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
+    if (std::filesystem::exists(VCS_PATH/VCS_CACHE))
         throw Exception{"Invalid Initialization: Repository already initialized"};
     Repository repo{repository_name};
     save_cache(&repo);
 
     // create commit_data file
-    std::ofstream vcs_commit_data{CURRENT_PATH/VCS_PATH/VCS_COMMIT_DATA};
-    std::ofstream vcs_ignore {CURRENT_PATH/VCS_PATH/VCS_IGNORE};
+    std::ofstream vcs_commit_data{VCS_PATH/VCS_COMMIT_DATA};
+    std::ofstream vcs_ignore {VCS_PATH/VCS_IGNORE};
     vcs_ignore.close();
     vcs_commit_data.close();
 }
@@ -83,13 +83,13 @@ void initialize(const std::string& repository_name)
 void add(const std::filesystem::path& source_path)
 // Move file to staged state
 {
-    copy_file_to_directory(source_path, CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE);
+    copy_file_to_directory(source_path, VCS_PATH/VCS_STAGED_STATE);
 }
 
 bool already_commited(const std::filesystem::path& filepath)
 // returns true if both there are any files in commited state that have the same filename
 {
-    for (auto& commited_state : std::filesystem::directory_iterator{CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE})
+    for (auto& commited_state : std::filesystem::directory_iterator{VCS_PATH/VCS_COMMITED_STATE})
     {
         if (commited_state.path().filename() == filepath.filename())
             return true;
@@ -116,51 +116,51 @@ void remove_file_from_directory(const std::filesystem::path path)
 void commit(Repository* repo, const std::string& commit_message)
 // make a commit to Repository object with commit_message
 {
-    if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_CACHE))
+    if (!std::filesystem::exists(VCS_PATH/VCS_CACHE))
         throw Exception{"Missing File Error: Repository uninitialized", CURRENT_FILENAME};
     Commit_Namespace::Commit commit{commit_message};
     std::filesystem::path filename;
 
     // iterate through each file in staged state
-    for (auto& filepath_iterator : std::filesystem::directory_iterator{CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE})
+    for (auto& filepath_iterator : std::filesystem::directory_iterator{VCS_PATH/VCS_STAGED_STATE})
     {
         // if not already commited copy to commited state in order to generalize function
         // e.g handle copy of a function as source state with no changes to modified state
         if (!already_commited(filepath_iterator.path()))
         {
-            copy_file_to_directory(filepath_iterator.path(), CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE);
+            copy_file_to_directory(filepath_iterator.path(), VCS_PATH/VCS_COMMITED_STATE);
         }
 
         filename = filepath_iterator.path().filename();
 
         // commited state as source, staged state as modified
         Commit_Namespace::Filechange fc{
-                                        Document_Namespace::Document{CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE/filename},
-                                        Document_Namespace::Document{CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE/filename}
+                                        Document_Namespace::Document{VCS_PATH/VCS_COMMITED_STATE/filename},
+                                        Document_Namespace::Document{VCS_PATH/VCS_STAGED_STATE/filename}
                                         };
 
         commit.push_back(fc);
 
-        remove_file_from_directory(CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE/filename);
-        copy_file_to_directory(CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE/filename, CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE);
+        remove_file_from_directory(VCS_PATH/VCS_COMMITED_STATE/filename);
+        copy_file_to_directory(VCS_PATH/VCS_STAGED_STATE/filename, VCS_PATH/VCS_COMMITED_STATE);
     }
     repo->add_commit(commit);
 
     save_cache(repo);
 
     // clear staged state for future commits
-    remove_files_from_directory(CURRENT_PATH/VCS_PATH/VCS_STAGED_STATE);
+    remove_files_from_directory(VCS_PATH/VCS_STAGED_STATE);
 }
 
 void restore(std::filesystem::path filename)
 // Discard all changes that were made after the last commit
 // filename is path relative to CURRENT_PATH
 {
-    if (!std::filesystem::exists(CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE))
+    if (!std::filesystem::exists(VCS_PATH/VCS_COMMITED_STATE))
         throw Exception{"Missing File Error: cannot restore file that was never commited", CURRENT_FILENAME};
 
-    remove_file_from_directory(CURRENT_PATH/filename);
-    copy_file_to_directory(CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE/filename, CURRENT_PATH);
+    remove_file_from_directory(filename);
+    copy_file_to_directory(VCS_PATH/VCS_COMMITED_STATE/filename, CURRENT_PATH);
 }
 
 void log(Repository* repo)
