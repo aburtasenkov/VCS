@@ -17,9 +17,11 @@ const std::string INIT = "init";
 const std::string ADD = "add";
 const std::string COMMIT = "commit";
 const std::string RESTORE = "restore";
+const std::string LOG = "log";
 
 // magic constants
 const int INPUT_COMMAND_INDEX = 1;
+const int MIN_ARGUMENTS = 2;
 const int MIN_INPUT_ARGUMENTS = 3;
 const std::string CURRENT_FILENAME = "main.cpp";
 
@@ -161,11 +163,16 @@ void restore(std::filesystem::path filename)
     copy_file_to_directory(CURRENT_PATH/VCS_PATH/VCS_COMMITED_STATE/filename, CURRENT_PATH);
 }
 
+void log(Repository* repo)
+{
+    std::cout << *repo << "\n";
+}
+
 int main(int argc, char** argv)
 try
 {    
     // argv should at least contain a string after executable name
-    if (argc < MIN_INPUT_ARGUMENTS)
+    if (argc < MIN_ARGUMENTS)
         throw Exception{"Syntax-Error: Bad Command Line Input", CURRENT_FILENAME};
 
     std::string INPUT_CURRENT_COMMAND = argv[INPUT_COMMAND_INDEX];
@@ -176,6 +183,16 @@ try
     {    
         Repository* repo = read_cache();
 
+        // for command line input containing only the command
+        if (argc < MIN_INPUT_ARGUMENTS)
+        {
+            if (INPUT_CURRENT_COMMAND == LOG)
+                log(repo);
+
+        }
+        else throw Exception{"Syntax-Error: Bad Command Line input", CURRENT_FILENAME};
+
+        // for command line input containing command and extra word
         if (INPUT_CURRENT_COMMAND == ADD)
             add(argv[INPUT_COMMAND_INDEX + 1]);
         else if (INPUT_CURRENT_COMMAND == COMMIT)
