@@ -1,5 +1,18 @@
 #include "Commit.hpp"
 
+std::filesystem::path Commit_Namespace::skip_n_parents(const std::filesystem::path& path, int n)
+// Skip n elements of a filepath 
+{
+    std::filesystem::path skipped;
+    for (auto p = path.begin(); p != path.end(); ++p)
+    {
+        if (n <= 0) 
+            skipped /= *p;
+        --n;
+    }
+    return skipped;
+}
+
 /*--------------------------------Commit Initializers----------------------------------------------------------------------------*/
 
 Commit_Namespace::Commit::Commit()

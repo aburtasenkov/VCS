@@ -8,6 +8,10 @@ Commit structure:
 COMMIT_TIMEPOINT COMMIT_MESSAGE COMMITED_STATE_PATH STAGED_STATE_PATH {}/{} COMMITED_STATE_PATH STAGED_STATE_PATH {}/{}
 COMMIT_TIMEPOINt COMMIT_MESSAGE COMMITED_STATE_PATH STAGED_STATE_PATH {{{REMOVED_LINE}REMOVED_LINE_INDEX}}/{} COMMITED_STATE_PATH STAGED_STATE_PATH {{{INSERTED_LINE}INSERTED_LINE_INDEX}}/{}
 */
+    const int FILEPATH_LENGHT_TO_MODIFIED_STATE = 2;    // amount of directories until VCS/commited_state
+
+    std::filesystem::path skip_n_parents(const std::filesystem::path& path, int n);
+
     struct Filechange
     {
             std::filesystem::path source;
@@ -16,8 +20,9 @@ COMMIT_TIMEPOINt COMMIT_MESSAGE COMMITED_STATE_PATH STAGED_STATE_PATH {{{REMOVED
 
             Filechange() {  }
             Filechange(const Document_Namespace::Document& doc1, const Document_Namespace::Document& doc2)
-                :source(doc1.get_path()), modified(doc2.get_path())
+                :source(skip_n_parents(doc1.get_path(), FILEPATH_LENGHT_TO_MODIFIED_STATE)), modified(skip_n_parents(doc2.get_path(), FILEPATH_LENGHT_TO_MODIFIED_STATE))
             {
+                std::cout << source << "\t" << modified << "\n";
                 changes = Document_Namespace::DocumentComparison{doc1, doc2};
             }
 
