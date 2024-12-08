@@ -24,8 +24,7 @@ Commit_Namespace::Commit::Commit(const std::string& message)
 
 void Commit_Namespace::Commit::push_back(const Commit_Namespace::Filechange& fc)
 {
-    if (fc.changes.is_modified())
-        modified_files.push_back(fc);
+    modified_files.push_back(fc);
 }
 
 /*-------------------------------------------Private member methods----------------------------------------------------------------------------*/
@@ -45,14 +44,14 @@ std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Commit& c)
 
 std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Filechange& c)
 {
-    os << c.filename << ' ' << c.changes;
+    os << c.source << ' ' << c.modified << ' ' << c.changes;
     return os;
 }
 
 std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 {
-    is >> c.filename >> c.changes;
-    c.filename = ignore_char(c.filename, '"');  //solves obscure bug of any other Filechange other than first having \" at the end of c.source 
+    is >> c.source >> c.modified >> c.changes;
+    c.source = ignore_char(c.source, '"');  //solves obscure bug of any other Filechange other than first having \" at the end of c.source 
     return is;
 }
 
@@ -84,9 +83,4 @@ std::istream& Commit_Namespace::operator>>(std::istream& is, std::tm& timepoint)
 std::ostream& Commit_Namespace::operator<<(std::ostream& os, const std::tm& timepoint)
 {
     return os << std::put_time(&timepoint, "%d.%m.%Y %H:%M:%S");
-}
-
-bool Commit_Namespace::Commit::contains_changes()
-{
-    return !modified_files.empty();
 }
