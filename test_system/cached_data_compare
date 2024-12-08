@@ -1,12 +1,20 @@
 tsetsetset
-30.11.2024 16:24:48 fesfsef "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test" {}/{}
-30.11.2024 16:24:57 testsehtdfh "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test2" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test2" {}/{}
-30.11.2024 16:25:38 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test" {{{HI}1}{{HI}3}}/{{{oH}0}}
-30.11.2024 16:25:47 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test" {}/{}
-30.11.2024 16:26:06 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test" {}/{}
-30.11.2024 16:27:19 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test" {}/{}
-30.11.2024 16:28:05 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test" {}/{}
-30.11.2024 16:29:49 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test" {{{oH}0}{{1}1}}/{{{Hello}1}{{World}2}{{3}56}}
-30.11.2024 16:29:54 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test" {}/{}
-30.11.2024 16:41:54 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test" {}/{}
-30.11.2024 16:41:59 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test" {}/{} "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test2" "/home/aburtasenkov/Pet-Projects/VCS/VCS/staged_state/test2" {}/{}
+30.11.2024 16:24:48 fesfsef "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" {}/{}
+30.11.2024 16:24:57 testsehtdfh "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test2" {}/{}
+30.11.2024 16:25:38 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" {{{HI}1}{{HI}3}}/{{{oH}0}}
+30.11.2024 16:25:47 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" {}/{}
+30.11.2024 16:26:06 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" {}/{}
+30.11.2024 16:27:19 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" {}/{}
+30.11.2024 16:28:05 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" {}/{}
+30.11.2024 16:29:49 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" {{{oH}0}{{1}1}}/{{{Hello}1}{{World}2}{{3}56}}
+30.11.2024 16:29:54 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" {}/{}
+30.11.2024 16:41:54 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" {}/{}
+30.11.2024 16:41:59 tsetshzt "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test" {}/{} "/home/aburtasenkov/Pet-Projects/VCS/VCS/commited_state/test2" {}/{}
+07.12.2024 13:42:41 testset "VCS/commited_state/test" {}/{}
+07.12.2024 13:42:51 testset "VCS/commited_state/test" {}/{} "VCS/commited_state/test2" {}/{}
+08.12.2024 19:17:51 tsetset "VCS/commited_state/test" {}/{}
+08.12.2024 19:34:06 tsetsez "VCS/commited_state/test" {}/{} "VCS/commited_state/test2" {}/{}
+08.12.2024 19:34:12 tsetsez "VCS/commited_state/test" {}/{} "VCS/commited_state/test2" {}/{}
+08.12.2024 19:34:16 tsetsez "VCS/commited_state/test" {}/{} "VCS/commited_state/test2" {}/{}
+08.12.2024 19:35:52 tsetsez "VCS/commited_state/test" {}/{} "VCS/commited_state/test2" {}/{}
+08.12.2024 19:35:58 tsetsez "VCS/commited_state/test" {}/{} "VCS/commited_state/test2" {}/{}

@@ -44,13 +44,13 @@ std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Commit& c)
 
 std::ostream& Commit_Namespace::operator<<(std::ostream& os, const Filechange& c)
 {
-    os << c.source << ' ' << c.modified << ' ' << c.changes;
+    os << c.source << ' ' << c.changes;
     return os;
 }
 
 std::istream& Commit_Namespace::operator>>(std::istream& is, Filechange& c)
 {
-    is >> c.source >> c.modified >> c.changes;
+    is >> c.source >> c.changes;
     c.source = ignore_char(c.source, '"');  //solves obscure bug of any other Filechange other than first having \" at the end of c.source 
     return is;
 }
