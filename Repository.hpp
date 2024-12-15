@@ -29,11 +29,13 @@ std::istream& operator>>(std::istream& is, Repository& repo)
 {
     std::getline(is, repo.name);
     std::string commit_line;
+    int index;
+    char ch;
     while (std::getline(is, commit_line))
     {
         std::istringstream iss{commit_line};
         Commit_Namespace::Commit commit{};
-        iss >> commit;
+        iss >> index >> ch >> commit;
         repo.commits.push_back(commit);
     }
     return is;
@@ -43,9 +45,9 @@ std::ostream& operator<<(std::ostream& os, const Repository& repo)
 // output Repository data
 {
     os << repo.name << '\n';
-    for (auto& commit : repo.commits)
+    for (int index = 0; index < repo.commits.size(); ++index)
     {
-        os << commit << '\n';
+        os << index << ". " << repo.commits[index] << '\n';
     }
     return os;
 }
