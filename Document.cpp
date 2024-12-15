@@ -221,13 +221,13 @@ Document_Namespace::Document Document_Namespace::operator+(Document_Namespace::D
 Document_Namespace::Document Document_Namespace::operator-(Document_Namespace::Document doc, Document_Namespace::DocumentComparison& changes)
 // discard changes from a document
 {
-    auto& container = changes.data(Document_Namespace::Linetype::removed);
-    for (auto& [line, index] : container)
-        doc.insert(doc.begin() + index, line);
-
-    container = changes.data(Document_Namespace::Linetype::inserted);
+    auto& container = changes.data(Document_Namespace::Linetype::inserted);
     for (auto& [line, index] : container)
         doc.erase(doc.begin() + index);
+
+    container = changes.data(Document_Namespace::Linetype::removed);
+    for (auto& [line, index] : container)
+        doc.insert(doc.begin() + index, line);
 
     return doc;
 }
