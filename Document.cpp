@@ -205,20 +205,30 @@ std::istream& Document_Namespace::operator>>(std::istream& is, DocumentCompariso
 }
 
 Document_Namespace::Document Document_Namespace::operator+(Document_Namespace::Document doc, Document_Namespace::DocumentComparison& changes)
-// Returns a Document_Namespace::Document object that contains changes.inserted in their right spots
-{
-    auto& container = changes.data(Document_Namespace::Linetype::inserted);
-    for (auto& [line, index] : container)
-        doc.insert(doc.begin() + index, line);
-    return doc;
-}
-
-Document_Namespace::Document Document_Namespace::operator-(Document_Namespace::Document doc, Document_Namespace::DocumentComparison& changes)
-// Returns a Document_Namespace::Document object without lines in changes.removed
+// Add changes to a document
 {
     auto& container = changes.data(Document_Namespace::Linetype::removed);
     for (auto& [line, index] : container)
         doc.erase(doc.begin() + index);
+
+    container = changes.data(Document_Namespace::Linetype::inserted);
+    for (auto& [line, index] : container)
+        doc.insert(doc.begin() + index, line);
+
+    return doc;
+}
+
+Document_Namespace::Document Document_Namespace::operator-(Document_Namespace::Document doc, Document_Namespace::DocumentComparison& changes)
+// discard changes from a document
+{
+    auto& container = changes.data(Document_Namespace::Linetype::removed);
+    for (auto& [line, index] : container)
+        doc.insert(doc.begin() + index, line);
+
+    container = changes.data(Document_Namespace::Linetype::inserted);
+    for (auto& [line, index] : container)
+        doc.erase(doc.begin() + index);
+
     return doc;
 }
 
