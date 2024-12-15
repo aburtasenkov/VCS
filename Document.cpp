@@ -189,7 +189,7 @@ bool get_line_changes(std::istream& is, Document_Namespace::DocumentComparison::
 
 std::istream& Document_Namespace::operator>>(std::istream& is, DocumentComparison& changes)
 {
-    std::vector<Document_Namespace::DocumentComparison::value_type>* container = &changes.removed;
+    auto* container = &changes.removed;
     for (int i = 0; i < 2; ++i) // do for 2 containers
     {
         char ch;
@@ -207,7 +207,7 @@ std::istream& Document_Namespace::operator>>(std::istream& is, DocumentCompariso
 Document_Namespace::Document Document_Namespace::operator+(Document_Namespace::Document doc, Document_Namespace::DocumentComparison& changes)
 // Returns a Document_Namespace::Document object that contains changes.inserted in their right spots
 {
-    std::vector<Document_Namespace::DocumentComparison::value_type>& container = changes.data(Document_Namespace::Linetype::inserted);
+    auto& container = changes.data(Document_Namespace::Linetype::inserted);
     for (auto& [line, index] : container)
         doc.insert(doc.begin() + index, line);
     return doc;
@@ -216,7 +216,7 @@ Document_Namespace::Document Document_Namespace::operator+(Document_Namespace::D
 Document_Namespace::Document Document_Namespace::operator-(Document_Namespace::Document doc, Document_Namespace::DocumentComparison& changes)
 // Returns a Document_Namespace::Document object without lines in changes.removed
 {
-    std::vector<Document_Namespace::DocumentComparison::value_type>& container = changes.data(Document_Namespace::Linetype::removed);
+    auto& container = changes.data(Document_Namespace::Linetype::removed);
     for (auto& [line, index] : container)
         doc.erase(doc.begin() + index);
     return doc;
