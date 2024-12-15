@@ -40,6 +40,7 @@ COMMIT_TIMEPOINt COMMIT_MESSAGE COMMITED_STATE_PATH STAGED_STATE_PATH {{{REMOVED
             friend std::ostream& operator<<(std::ostream& os, const std::tm& timepoint);
             bool is_pushed() const { return state; }
             void push() { state = commit_state::pushed; }
+            std::vector<Filechange>& get_changes() { return modified_files; }
         private:
             enum commit_state
             {

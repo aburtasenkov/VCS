@@ -18,6 +18,7 @@ const std::string ADD = "add";
 const std::string COMMIT = "commit";
 const std::string RESTORE = "restore";
 const std::string LOG = "log";
+const std::string BACKUP = "backup";
 
 // magic constants
 const int INPUT_COMMAND_INDEX = 1;
@@ -168,6 +169,11 @@ void log(Repository* repo)
     std::cout << *repo << "\n";
 }
 
+void backup(Repository* repo, int index)
+{
+
+}
+
 int main(int argc, char** argv)
 try
 {    
@@ -197,7 +203,9 @@ try
             commit(repo, argv[INPUT_COMMAND_INDEX + 1]);
         else if (INPUT_CURRENT_COMMAND == RESTORE)
             restore(argv[INPUT_COMMAND_INDEX + 1]); 
-
+        else if (INPUT_CURRENT_COMMAND == BACKUP)
+            backup(repo, std::stoi(argv[INPUT_COMMAND_INDEX + 1]));
+        
         delete repo;
     }
 
