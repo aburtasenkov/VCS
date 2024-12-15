@@ -171,7 +171,28 @@ void log(Repository* repo)
 
 void backup(Repository* repo, int index)
 {
+    // iterate over each file in commited state
+    for (auto& filepath_iterator : std::filesystem::directory_iterator{VCS_PATH/VCS_COMMITED_STATE})
+    {
+        std::filesystem::path filename = filepath_iterator.path().filename();
+        // iterate over each filechange of last commit
+        for (auto filechange : repo->get_commits()[repo->get_commits().size() - 1].get_changes())
+        {
+            // if any changes
+            if (filename == filechange.source.filename())            
+            {
+                // open file, discard changes, save file
+                Document_Namespace::Document doc{VCS_PATH/VCS_COMMITED_STATE/filename};
+                doc = doc - filechange.changes;
+                std::ofstream ofs{VCS_PATH/VCS_COMMITED_STATE/filename};
+                ofs << doc;
 
+                // remove last commit from repo and save to cache
+                repo->get_commits().pop_back();
+                save_cache(repo);
+            }
+        }
+    }    
 }
 
 int main(int argc, char** argv)
