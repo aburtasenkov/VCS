@@ -31,6 +31,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Repository& repo);
 
     const std::string& get_name() { return name; };
+    std::vector<Commit_Namespace::Commit>& get_commits() { return commits; }
 private:
     std::string name;
     std::vector<Commit_Namespace::Commit> commits;
