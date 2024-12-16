@@ -22,7 +22,6 @@ COMMIT_TIMEPOINt COMMIT_MESSAGE COMMITED_STATE_PATH STAGED_STATE_PATH {{{REMOVED
             Filechange(const Document_Namespace::Document& doc1, const Document_Namespace::Document& doc2)
                 :source(skip_n_parents(doc1.get_path(), FILEPATH_LENGHT_TO_MODIFIED_STATE)), modified(skip_n_parents(doc2.get_path(), FILEPATH_LENGHT_TO_MODIFIED_STATE))
             {
-                std::cout << source << "\t" << modified << "\n";
                 changes = Document_Namespace::DocumentComparison{doc1, doc2};
             }
 
