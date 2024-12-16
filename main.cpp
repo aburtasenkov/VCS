@@ -169,9 +169,11 @@ void log(Repository* repo)
     std::cout << *repo << "\n";
 }
 
-void backup(Repository* repo, const int index)
+void backup(Repository* repo, const int last_commit_index)
+// backup all commits until last_commit_index incl.
 {
-    for (int commit_index = repo->get_commits().size() - 1; commit_index >= index; --commit_index)
+    // iterate over every commit from end until last_commit_index
+    for (int commit_index = repo->get_commits().size() - 1; commit_index >= last_commit_index; --commit_index)
     {
         // iterate over each file in commited state
         for (auto& filepath_iterator : std::filesystem::directory_iterator{VCS_PATH/VCS_COMMITED_STATE})
