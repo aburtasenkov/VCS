@@ -2,6 +2,27 @@
 
 class Repository{
 public:
+    typedef std::vector<Commit_Namespace::Commit>::iterator iterator;
+    typedef std::vector<Commit_Namespace::Commit>::const_iterator const_iterator;
+    iterator begin()
+    {
+        return commits.begin();
+    }
+
+    iterator end()
+    {
+        return commits.end();
+    }
+
+    const_iterator begin() const
+    {
+        return commits.begin();
+    }
+
+    const_iterator end() const
+    {
+        return commits.end();
+    }
     Repository() {}
     Repository(const std::string& repo_name);
 
@@ -10,7 +31,6 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Repository& repo);
 
     const std::string& get_name() { return name; };
-    std::vector<Commit_Namespace::Commit>& get_commits() { return commits; }
 private:
     std::string name;
     std::vector<Commit_Namespace::Commit> commits;
