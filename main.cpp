@@ -125,14 +125,16 @@ void commit(Repository* repo, const std::string& commit_message)
     // iterate through each file in staged state
     for (auto& filepath_iterator : std::filesystem::directory_iterator{VCS_PATH/VCS_STAGED_STATE})
     {
+
+        filename = filepath_iterator.path().filename();
+
         // if not already commited copy to commited state in order to generalize function
         // e.g handle copy of a function as source state with no changes to modified state
         if (!already_commited(filepath_iterator.path()))
         {
-            copy_file_to_directory(filepath_iterator.path(), VCS_PATH/VCS_COMMITED_STATE);
+            std::ofstream ofs{VCS_PATH/VCS_COMMITED_STATE/filename};
+            //copy_file_to_directory(filepath_iterator.path(), VCS_PATH/VCS_COMMITED_STATE);
         }
-
-        filename = filepath_iterator.path().filename();
 
         // commited state as source, staged state as modified
         Commit_Namespace::Filechange fc{
