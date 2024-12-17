@@ -74,8 +74,6 @@ namespace Document_Namespace
             std::ostream& output_removed(std::ostream& os) const;
     };
 
-    bool contains(const Document& doc, const Document::value_type& line);
-
     std::ostream& operator<<(std::ostream& os, const DocumentComparison& changes);
     std::istream& operator>>(std::istream& is, DocumentComparison& changes);
 
