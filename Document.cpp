@@ -107,7 +107,7 @@ void Document_Namespace::DocumentComparison::push_back_inserted(const Document_N
     // if source doesn't contain any line of modified -> new line was added to modified
     for (auto& line : modified)
     {
-        if (!contains(source, line))
+        if (std::find(source.begin(), source.end(), line) == source.end())
             inserted.push_back({line, index});
         ++index;
     }
@@ -119,22 +119,10 @@ void Document_Namespace::DocumentComparison::push_back_removed(const Document_Na
     // if modified doesn't contain any line of source -> a line was removed from source
     for (auto& line : source)
     {
-        if (!contains(modified, line))
+        if (std::find(modified.begin(), modified.end(), line) == modified.end())
             removed.push_back({line, index});
         ++index;
     }
-}
-
-/*---------------------------------------------------------------------------------------------*/
-
-bool Document_Namespace::contains(const Document_Namespace::Document& doc, const Document_Namespace::Document::value_type& line)
-{
-    for (const auto& l : doc)
-    {
-        if (l == line)
-            return true;
-    }
-    return false;
 }
 
 /*-------------------------------------------private output methods--------------------------------------------------*/
