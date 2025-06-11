@@ -49,10 +49,6 @@ g++ -std=c++17 -o test test_system/test.cpp Commit.cpp Document.cpp iostream_hel
 - Standard C++ libraries only
 - No third-party dependencies
 
-## 👨‍💻 Author
-
-Developed by [Your Name Here]. Contributions welcome!
-
 ## 📜 License
 
 This project is open-source and available under the [MIT License](LICENSE).
