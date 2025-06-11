@@ -53,8 +53,16 @@ g++ -std=c++17 -o test test_system/test.cpp Commit.cpp Document.cpp iostream_hel
 
 Developed by [Your Name Here]. Contributions welcome!
 
-## 📝 License
+## 📜 License
 
-This project is licensed under the MIT License. See `LICENSE` for details.
+This project is open-source and available under the [MIT License](LICENSE).
+
+---
+
+## 🙋 About Me
+
+Hi! I'm a passionate C++ developer interested in backend programming. This project showcases my love for clean architecture and strategic logic. If you'd like to collaborate, feel free to reach out!
+
+[🔗 LinkedIn](https://www.linkedin.com/in/anton-burtasenkov-1a44492b1/) | [📧 Email](mailto:aburtasenkov@gmail.com)
 
 ---
